@@ -1,14 +1,12 @@
 {% extends "layout/layout.html" %}
 {% block content %}
-<div class="row col-lg-12">
-    <div class="col-lg-3">
-
-    </div>
-    <div class="col-lg-6">
+{% include 'layout/home_header.html' %}
+<div class="row col-lg-12 mt-8">
+    <div class="col-lg-6 ">
         <form action="" method="POST">
             {{ form.hidden_tag() }}
             <fieldset class="form-group">
-                <legend class="border-bottom mb-4"> Join Today</legend>
+                <legend class="d-flex justify-content-center mb-3">Patient Registeration Form</legend>
                 <div class="row">
                     <div class="col-lg-6">
                         <div class="form-group">
