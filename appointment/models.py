@@ -28,9 +28,10 @@ class DoctorInfo(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     degree = db.Column(db.String(40), nullable=False)
     specialty = db.Column(db.String(50), nullable=False)
+    valid = db.Column(db.Boolean, default=False)
 
     def __repr__(self):
-        return f"DoctorInfo('{self.id}', '{self.user_id}', '{self.degree}', '{self.specialty}')"
+        return f"DoctorInfo('{self.id}', '{self.user_id}', '{self.degree}', '{self.specialty}, '{self.valid}')"
 
 
 # class User(db.Model):

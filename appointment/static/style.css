@@ -2,6 +2,7 @@
     font-size: 15px;
     padding: 5px;
     border-color: #a370f7;
+    color: black;
 }
 .none-border{
     border:none;
@@ -15,10 +16,9 @@
 .bd-navbar{
     position: sticky;
     top: 0;
-    padding: 0 10px;
+    padding: 0 35px;
     z-index: 1071;
     min-height: 4rem;
-    background-color: rgb(121 82 179);
 }
 .title{
     color:white;
@@ -30,6 +30,9 @@
 .mt-6{
     margin-top: 60px;
 }
+.mt-8{
+    margin-top: 80px;
+}
 .content-center{
     display: flex;
     justify-content: center;
@@ -37,4 +40,22 @@
 }
 .h-full{
     height: calc(100vh - 4.8rem);
+}
+.p-0{
+    padding: 0 !important;
+}
+.h-m-7{
+    min-height: 70px;
+}
+.border-10{
+    border-radius: 10px;
+}
+.body-bg{
+    background-color: #f0f3ed;
+}
+.sidebar-bg{
+    background-color: #c3c7bf;
+}
+.bg-white{
+    background-color: white;
 }

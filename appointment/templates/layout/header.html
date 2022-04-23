@@ -1,11 +1,11 @@
 
-<header class="navbar navbar-expand navbar-dark flex-column flex-md-row bd-navbar">
+<header class="navbar navbar-expand bg-secondary flex-column flex-md-row bd-navbar">
     <ul class="navbar-nav mr-auto">
         <li class="nav-item  font-weight-bold title">
             <span clss="nav-link" href="#">Doctor Appointment App</span>
         </li>
     </ul>
-    <ul class="navbar nav navbar-right">
-        <li class="nav-item"> <a href="#" class="nav-link white"><span class="icon-signin p-2"></span>SignOut</a></li>
+    <ul class="navbar nav navbar-right p-0">
+        <li class="nav-item"> <a href="{{ url_for('logout') }}" class="nav-link white">Logout</a></li>
     </ul>
 </header>
