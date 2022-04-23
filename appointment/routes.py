@@ -27,16 +27,3 @@ def register():
         return redirect(url_for('home'))
     return render_template("register.html", form=form)
 
-@app.route("/register", methods=['GET','POST'])
-def register():
-    form = DoctorRegisterationForm()
-    if form.validate_on_submit():
-        hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
-        patient = Patient(name=form.name.data, lastname=form.lastname.data, email=form.email.data,
-            address = form.address.data, date_of_birth = form.date_of_birth.data, phone= form.phone.data
-            ,password=hashed_password)
-        db.session.add(patient)
-        db.session.commit()
-        flash('Your account has been created! You are now able to log in', 'success')
-        return redirect(url_for('home'))
-    return render_template("register.html", form=form)
