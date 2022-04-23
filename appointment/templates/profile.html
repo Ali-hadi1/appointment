@@ -1,5 +1,135 @@
+{% extends "layout/layout.html" %}
+{% include "layout/home_header.html" %}
+{% block content %}
+<div class="container mt-8">
+    <div class="row" >
+  		<div class="col-sm-3">     
 
-
-<h1>
-    {{ user.name }}
-</h1>
+        <div class="text-center">
+                <img src="http://ssl.gstatic.com/accounts/ui/avatar_2x.png" class="avatar img-circle img-thumbnail" alt="avatar">
+                <input type="file" class="text-center center-block file-upload">
+        </div>
+            </hr>
+            <br>
+            <ul class="list-group">
+                    <li class="list-group-item text-muted">Info</li>
+                    <li class="list-group-item d-flex justify-content-between">Name: <span>{{current_user.name}}</span></li>
+                    <li class="list-group-item d-flex justify-content-between">Lastname: <span >{{current_user.lastname}}</span> </li>
+                    <li class="list-group-item d-flex flex-wrap justify-content-between">Email: <a href="{{ current_user.email }}"> {{current_user.email}}</a> </li>
+                    <li class="list-group-item d-flex justify-content-between">Phone: <span> {{ current_user.phone }}</span></li>
+            </ul>  
+            </div>
+            <div class="col-sm-9 mt-3">
+                <ul class="nav nav-tabs">
+                    <li class="active font-weight-bold">Update Your Profile</li>
+                </ul>
+                <form action="" method="POST" class="mt-3">
+                    {{ form.hidden_tag() }}
+                    <fieldset class="form-group">
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    {{ form.name.label(class="form-control-label text-capitalize") }}
+                                    {% if form.name.errors %}
+                                        {{ form.name(class="form-control form-control-lg is-invalid") }}
+                                        <div class="invalid-feedback">
+                                            {% for errors in form.name.errors %}
+                                                <span> {{ error }} </span>
+                                            {% endfor %}
+                                        </div>
+                                    {% else %}
+                                        {{ form.name(class="form-control form-control-lg input_style", placeholder="Enter your Name") }}
+                                    {% endif %}
+                    
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    {{ form.lastname.label(class="form-control-label text-capitalize") }}
+                                    {% if form.lastname.errors %}
+                                        {{ form.lastname(class="form-control form-control-lg is-invalid") }}
+                                        <div class="invalid-feedback">
+                                            {% for errors in form.lastname.errors %}
+                                                <span> {{ error }} </span>
+                                            {% endfor %}
+                                        </div>
+                                    {% else %}
+                                        {{ form.lastname(class="form-control form-control-lg input_style", placeholder="Enter your Lastname") }}
+                                    {% endif %}
+                    
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    {{ form.email.label(class="form-control-label text-capitalize") }}
+                                    {% if form.email.errors %}
+                                        {{ form.email(class="form-control form-control-lg is-invalid") }}
+                                        <div class="invalid-feedback">
+                                            {% for errors in form.email.errors %}
+                                                <span> {{ error }} </span>
+                                            {% endfor %}
+                                        </div>
+                                    {% else %}
+                                        {{ form.email(class="form-control form-control-lg input_style", placeholder="Enter your Email") }}
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    {{ form.address.label(class="form-control-label text-capitalize") }}
+                                    {% if form.address.errors %}
+                                        {{ form.address(class="form-control form-control-lg is-invalid") }}
+                                        <div class="invalid-feedback">
+                                            {% for errors in form.address.errors %}
+                                                <span> {{ error }} </span>
+                                            {% endfor %}
+                                        </div>
+                                    {% else %}
+                                        {{ form.address(class="form-control form-control-lg input_style", placeholder="Enter your address") }}
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    {{ form.phone.label(class="form-control-label text-capitalize") }}
+                                    {% if form.phone.errors %}
+                                        {{ form.phone(class="form-control form-control-lg is-invalid") }}
+                                        <div class="invalid-feedback">
+                                            {% for errors in form.phone.errors %}
+                                                <span> {{ error }} </span>
+                                            {% endfor %}
+                                        </div>
+                                    {% else %}
+                                        {{ form.phone(class="form-control form-control-lg input_style" , placeholder="Enter your Phone") }}
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    {{ form.date_of_birth.label(class="form-control-label text-capitalize") }}
+                                    {% if form.date_of_birth.errors %}
+                                        {{ form.date_of_birth(class="form-control form-control-lg is-invalid") }}
+                                        <div class="invalid-feedback">
+                                            {% for errors in form.date_of_birth.errors %}
+                                                <span> {{ error }} </span>
+                                            {% endfor %}
+                                        </div>
+                                    {% else %}
+                                        {{ form.date_of_birth(class="form-control form-control-lg input_style") }}
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                    <div class="form-group mt-3">
+                        {{ form.submit(class="btn btn-outline-info") }}
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}
