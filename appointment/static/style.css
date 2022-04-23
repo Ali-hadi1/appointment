@@ -27,6 +27,14 @@
 .white{
     color: white;
 }
-.mt-8{
-    margin-top: 80px;
+.mt-6{
+    margin-top: 60px;
+}
+.content-center{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.h-full{
+    height: calc(100vh - 4.8rem);
 }

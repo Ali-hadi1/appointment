@@ -1,12 +1,12 @@
 {% extends "layout/layout.html" %}
 {% block content %}
 {% include 'layout/home_header.html' %}
-<div class="row col-lg-12 mt-8">
-    <div class="col-lg-6 ">
+<div class="row content-center col-lg-12 h-full mt-6">
+    <div class="col-lg-6">
         <form action="" method="POST">
             {{ form.hidden_tag() }}
             <fieldset class="form-group">
-                <legend class="d-flex justify-content-center mb-3">Patient Registeration Form</legend>
+                <legend class="d-flex justify-content-center mb-3">Create Account</legend>
                 <div class="row">
                     <div class="col-lg-6">
                         <div class="form-group">
@@ -108,16 +108,16 @@
                 <div class="row">
                     <div class="col-lg-6">
                         <div class="form-check">
-                            {{ form.status.label(class="form-check-label text-capitalize") }}
-                            {% if form.status.errors %}
-                                {{ form.status(class="form-control form-control-lg is-invalid") }}
+                            {{ form.role.label(class="form-check-label text-capitalize") }}
+                            {% if form.role.errors %}
+                                {{ form.role(class="form-control form-control-lg is-invalid") }}
                                 <div class="invalid-feedback">
-                                    {% for errors in form.status.errors %}
+                                    {% for errors in form.role.errors %}
                                         <span> {{ error }} </span>
                                     {% endfor %}
                                 </div>
                             {% else %}
-                                {{ form.status(class="form-control form-control-lg none-border") }}
+                                {{ form.role(class="form-control form-control-lg input_style custom-check-style") }}
                             {% endif %}
                         </div>
                     </div>
@@ -174,9 +174,6 @@
                 {{ form.submit(class="btn btn-outline-info") }}
             </div>
         </form>
-    </div>
-    <div class="col-lg-3">
-
     </div>
 </div>
 {% endblock content %}
