@@ -9,7 +9,9 @@ from flask_login import login_user, current_user, logout_user, login_required
 @login_required
 def dashboard():
     if current_user.role == 1:
-        return render_template("index.html")
+        doc_request = DoctorInfo.query.filter_by(valid=False).all()
+        count = len(doc_request)
+        return render_template("dashboard.html", count = count)
     else:
         flash("Oops, you haven't right privilage", 'info')
         return redirect(url_for('home'))
@@ -76,3 +78,21 @@ def logout():
 def profile():
     form = UpdateAccount()
     return render_template('profile.html', user=current_user , form=form)
+
+@app.route("/requests")
+def requests():
+    doc= db.session.query(DoctorInfo, User).join(User).filter(DoctorInfo.valid==False).all()
+    return render_template('request_table.html', doc_info = doc)
+
+
+@app.route("/users")
+def users():
+    users = User.query.all()
+    return render_template("/usersList.html", users=users)
+
+@app.route("/delete/<int:id>")
+def delete(id):
+    user = User.query.filter_by(id=id).first()
+    db.session.delete(user)
+    db.session.commit()
+    return redirect(url_for('users'))

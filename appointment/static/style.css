@@ -48,14 +48,35 @@
     min-height: 70px;
 }
 .border-10{
-    border-radius: 10px;
+    border-radius: calc(0.25rem - 1px);
 }
 .body-bg{
-    background-color: #f0f3ed;
+    background-color: #eceff1;
 }
 .sidebar-bg{
-    background-color: #c3c7bf;
+    background-color: #252733;
 }
 .bg-white{
     background-color: white;
+}
+a:hover{
+    text-decoration: none;
+    color: rgb(126, 107, 107);
+}
+.sidebar-items-des{
+    background: #968484;
+    border-radius: 5px;
+}
+.full-hv{
+    height: 100%!important;
+    width: 100%!important;
+}
+.app-normal-font{
+    font-size: 14px;
+}
+.bg-inherite{
+    background-color: inherit;
+}
+ul{
+    list-style-type: none;
 }

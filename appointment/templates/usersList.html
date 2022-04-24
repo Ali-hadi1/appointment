@@ -1,0 +1,72 @@
+{% extends "index.html" %}
+
+{% block section %}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="main-card mb-3 card">
+                <div class="card-header">Users </div>
+                <div class="table-responsive">
+                    <table class="align-middle mb-0 table table-borderless table-striped table-hover">
+                        <thead>
+                            <tr  class="app-normal-font">
+                                <th class="text-center">Id</th>
+                                <th class="text-center">Name</th>
+                                <th class="text-center">lastname</th>
+                                <th class="text-center">email</th>
+                                <th class="text-center">address</th>
+                                <th class="text-center">role</th>
+                                <th class="text-center">gender</th>
+                                <th class="text-center">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for user in users %}
+                                <tr class="app-normal-font p-0">
+                                    <td class="align-center text-muted">{{ user.id }}</td>
+                                    <td class="text-center">
+                                        <div class="widget-content p-0">
+                                            {{user.name}}
+                                        </div>
+                                    </td>
+                                    <td class="text-center">{{user.lastname}}</td>
+                                    <td class="text-center">
+                                        <a href="{{ user.email }}">
+                                            {{user.email}}
+                                        </a>
+                                    </td>
+                                    <td class="text-center">
+                                        {{user.address}}
+                                    </td>
+                                    <td class="text-center">
+                                        {% if user.role == 1 %}
+                                            <div class="badge badge-warning">Admin </div>
+                                        {% elif user.role == 2%}
+                                            <div class="badge badge-info">Doctor </div>
+                                        {% else %}
+                                            <div class="badge badge-success">Patient </div>
+                                        {% endif %}
+                                    </td>
+                                    <td class="text-center" style="width: 150px;">
+                                        {% if user.gender == True %}
+                                            Male
+                                        {% else %}
+                                            Female
+                                        {% endif %}
+                                    </td>
+                                    <td class="text-center">
+                                        <a href="" class="text-info">
+                                            <i class="bi bi-person-circle"></i>
+                                        </a>
+                                        <a href="{{ url_for('delete', id = user.id)}}" class="text-danger">
+                                            <i class="bi bi-trash-fill"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

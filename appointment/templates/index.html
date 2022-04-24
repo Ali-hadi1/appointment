@@ -6,27 +6,28 @@
             <div class="sideba1r-sticky">
             <ul class="nav flex-column text-block ">
                 <li class="nav-item">
-                    <a class="nav-link active" href="#">
-                        Dashboard <span class="sr-only">(current)</span>
+                    <a class="nav-link active no-hover white" href="{{url_for('dashboard')}}">
+                        <i class="bi bi-speedometer2"></i>
+                        Dashboard
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">
+                    <a class="nav-link no-hover white" href="{{ url_for('users')}}">
                         Users
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">
+                    <a class="nav-link no-hover white" href="#">
                         Doctors Scheduals
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">
+                    <a class="nav-link no-hover white" href="#">
                         Appointment Data
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">
+                    <a class="nav-link no-hover white" href="#">
                         Reports
                     </a>
             </ul>
@@ -36,16 +37,5 @@
 {% endblock %}
 
 {% block section %}
-    <div class="row">
-        <div class="col-lg-12 pb-3">
-            <ul class="nav nav-tabs">
-                <li class="active font-weight-bold">Dashboard</li>
-            </ul>
-        </div>
-        <div class="d-flex justify-content-around col-lg-12">
-            <div class="col-md-3 h-m-7 border-10 bg-white "></div>
-            <div class="col-md-3 h-m-7 border-10 bg-white"></div>
-            <div class="col-md-3 h-m-7 border-10 bg-white"></div>
-        </div>
-    </div>
+    
 {% endblock %}
