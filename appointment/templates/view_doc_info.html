@@ -1,0 +1,34 @@
+{% extends "index.html" %}
+
+{% block section %}
+<div class="container">
+    <div class="row">
+        <div class="col-sm-3">
+
+            <div class="text-center">
+                <img src="http://ssl.gstatic.com/accounts/ui/avatar_2x.png" class="avatar img-circle img-thumbnail"
+                    alt="avatar">
+                <input type="file" class="text-center center-block file-upload">
+            </div>
+            </hr>
+            <br>
+            <ul class="list-group">
+                <li class="list-group-item text-muted">Info</li>
+                <li class="list-group-item d-flex justify-content-between">Name: <span>{{user.name}}</span></li>
+                <li class="list-group-item d-flex justify-content-between">Lastname:
+                    <span>{{user.lastname}}</span> </li>
+                <li class="list-group-item d-flex flex-wrap justify-content-between">Email: <a
+                        href="{{ user.email }}"> {{user.email}}</a> </li>
+                <li class="list-group-item d-flex justify-content-between">Phone: <span> {{ user.phone }}</span>
+                </li>
+            </ul>
+        </div>
+        <div class="col-sm-9 mt-3">
+            <ul class="nav nav-tabs">
+                <li class="active font-weight-bold">Update Your Profile</li>
+            </ul>
+
+        </div>
+    </div>
+</div>
+{% endblock %}

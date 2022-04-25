@@ -50,8 +50,7 @@ class DoctorInfoForm(FlaskForm):
     specialty = StringField('speciality', validators=[DataRequired(), Length(min=4 , max=200)])
     submit = SubmitField('submit')
 
-class LoginForm(FlaskForm):
-    email = StringField('email',validators=[DataRequired(), Email()])
-    password = PasswordField('password', validators=[DataRequired()])
-    remember = BooleanField('Remember Me')
-    submit = SubmitField('Login')
+class CreateSchedule(FlaskForm):
+    start_date = DateField('start_date', validators=[DataRequired()])
+    end_date = DateField('end_date', validators=[DataRequired()])
+    submit = SubmitField('submit')

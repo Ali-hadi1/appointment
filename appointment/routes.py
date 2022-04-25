@@ -1,7 +1,7 @@
 from flask import Flask, render_template, url_for, flash, redirect, request
 from appointment import app, db, bcrypt
-from appointment.models import User, DoctorInfo
-from appointment.forms import UpdateAccount, UserRegisteration, Login, DoctorInfoForm
+from appointment.models import User, DoctorInfo, Schedule
+from appointment.forms import UpdateAccount, UserRegisteration, Login, DoctorInfoForm, CreateSchedule
 from flask_login import login_user, current_user, logout_user, login_required
 
 
@@ -103,8 +103,9 @@ def profile():
 
 @app.route("/requests")
 def requests():
-    doc= db.session.query(DoctorInfo, User).join(User).filter(DoctorInfo.valid==False).all()
-    return render_template('request_table.html', doc_info = doc)
+    data = db.session.query(User.id, User.name, User.lastname,User.email, User.date_of_birth, DoctorInfo.degree,DoctorInfo.specialty, User.gender, DoctorInfo.valid).join(User, User.id == DoctorInfo.user_id).filter(DoctorInfo.valid==False).all()
+    # doctors = [ i for i in data if i.valid==False]
+    return render_template('request_table.html', doctors = data)
 
 
 @app.route("/users")
@@ -118,3 +119,25 @@ def delete(id):
     db.session.delete(user)
     db.session.commit()
     return redirect(url_for('users'))
+
+@app.route("/confirm/<int:id>")
+def confirm(id):
+    doc = DoctorInfo.query.filter_by(id=id).first()
+    doc.valid = True
+    db.session.commit()
+    return redirect(url_for('requests'))
+
+@app.route("/schedule", methods=('GET', 'POST'))
+def schedule():
+    schedules = Schedule.query.all()
+    form = CreateSchedule()
+    if form.validate_on_submit():
+        sche = Schedule(doctor_id = current_user.id, start_date=form.start_date.data, end_date = form.end_date.data)
+        db.session.add(sche)
+        db.session.commit()
+        return render_template('/schedule.html', form=form, schedules=schedules)
+    return render_template("/schedule.html", form=form, schedules=schedules)
+
+@app.route("/appointment", methods=('GET', 'POST'))
+def appointment():
+    return render_template("/appointment.html")

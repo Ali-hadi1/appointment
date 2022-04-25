@@ -2,7 +2,6 @@ from appointment import db, login_manager
 from datetime import datetime
 from flask_login import UserMixin
 
-import appointment
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -15,7 +14,7 @@ class User(db.Model, UserMixin):
     email = db.Column(db.String(40), unique=True, nullable=False)
     address = db.Column(db.Text , nullable=False)
     phone = db.Column(db.String(20), unique=True, nullable=False)
-    date_of_birth = db.Column(db.DateTime(), default = datetime.utcnow )
+    date_of_birth = db.Column(db.Date(), default = datetime.now().date())
     role = db.Column(db.Integer, nullable=False, default=3)
     gender = db.Column(db.Boolean, default=True, nullable=False)
     password = db.Column(db.String(60), nullable=False)
@@ -41,8 +40,8 @@ class Schedule(db.Model):
     __tablename__='Schedule'
     id = db.Column(db.Integer, primary_key=True)
     doctor_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    start_date = db.Column(db.DateTime(), default = datetime.utcnow )
-    end_date = db.Column(db.DateTime(), default = datetime.utcnow )
+    start_date = db.Column(db.Date(), default = datetime.now().date())
+    end_date = db.Column(db.Date(), default = datetime.now().date())
     appointment = db.relationship('Appointment', backref='Schedule', lazy=True)
 
 
@@ -55,7 +54,7 @@ class Appointment(db.Model):
     patient_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     schedule_id = db.Column(db.Integer, db.ForeignKey('Schedule.id'))
     reason = db.Column(db.String(200))
-    appointment_date = db.Column(db.DateTime(), default = datetime.utcnow )
+    appointment_date = db.Column(db.Date(), default = datetime.now().date() )
 
     def __repr__(self):
         return f"DoctorInfo('{self.id}', '{self.patient_id}', '{self.schedule_id}', '{self.reason}', '{self.appointment_date}')"
