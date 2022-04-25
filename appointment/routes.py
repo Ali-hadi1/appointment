@@ -46,7 +46,7 @@ def doctor(id):
         doc_info= DoctorInfo(user_id = id , degree=form.degree.data, specialty=form.specialty.data)
         db.session.add(doc_info)
         db.session.commit()
-        flash("Your Info submited successfully wait for confimation!")
+        flash("Your Info submited successfully wait for confimation!", 'info')
         return redirect(url_for('home'))
     return render_template('doctor_info_form.html',form=form)
 
@@ -65,7 +65,7 @@ def login():
             next_page = request.args.get('next')
             return redirect(next_page) if next_page else redirect(url_for('home'))
         else:
-            flash("check your email or passowrd!", 'danger')
+            flash("check your email or password!", 'danger')
     return render_template("login.html", form=form)
 @app.route("/logout")
 def logout():
@@ -73,10 +73,32 @@ def logout():
     return redirect(url_for('home'))
 
 
-@app.route("/profile")
+@app.route("/profile", methods=('GET', 'POST'))
 @login_required
 def profile():
     form = UpdateAccount()
+    if form.validate_on_submit():
+        if form.email.data != current_user.email:
+            user = User.query.filter_by(email=form.email.data).first()
+            if user:
+                flash("This email already exist!", 'warning')
+                return redirect(url_for('profile'))
+        current_user.name = form.name.data
+        current_user.lastname = form.lastname.data
+        current_user.email = form.email.data
+        current_user.address = form.address.data
+        current_user.phone = form.phone.data
+        current_user.date_of_birth = form.date_of_birth.data
+        db.session.commit()
+        flash('Your account Updated Successfully', 'success')
+        return redirect(url_for('profile'))
+    elif request.method == 'GET':
+        form.name.data = current_user.name
+        form.lastname.data = current_user.lastname
+        form.email.data = current_user.email
+        form.address.data = current_user.address
+        form.phone.data = current_user.phone
+        form.date_of_birth.data = current_user.date_of_birth
     return render_template('profile.html', user=current_user , form=form)
 
 @app.route("/requests")
