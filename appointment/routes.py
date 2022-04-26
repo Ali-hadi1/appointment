@@ -1,12 +1,31 @@
 from flask import Flask, render_template, url_for, flash, redirect, request
 from appointment import app, db, bcrypt
-from appointment.models import User, DoctorInfo, Schedule
-from appointment.forms import UpdateAccount, UserRegisteration, Login, DoctorInfoForm, CreateSchedule
+from functools import wraps
+from appointment.models import User, DoctorInfo, Schedule, Appointment
+from appointment.forms import UpdateAccount, UserRegisteration, Login, DoctorInfoForm, CreateSchedule, MakeAppointment
 from flask_login import login_user, current_user, logout_user, login_required
 
 
+def admin_required(f):
+    @wraps(f)
+    def wrap(*args, **kwargs):
+        if current_user and current_user.role == 1:
+            return f(*args, **kwargs)
+        flash("Ooops login or your privilage is not satisfied", "info")
+        return redirect(url_for('home'))
+    return wrap
+
+def doctor_or_admin_required(f):
+    @wraps(f)
+    def wrap(*args, **kwargs):
+        if current_user and (current_user.role == 1 or current_user.role == 2) :
+            return f(*args, **kwargs)
+        flash("Ooops login or your privilage is not satisfied", "info")
+        return redirect(url_for('home'))
+    return wrap
+
 @app.route("/dashboard")
-@login_required
+@admin_required
 def dashboard():
     if current_user.role == 1:
         doc_request = DoctorInfo.query.filter_by(valid=False).all()
@@ -19,7 +38,8 @@ def dashboard():
 @app.route("/")
 @app.route("/home")
 def home():
-    return render_template("home.html")
+    doctors = db.session.query(User.id, User.name, User.lastname,User.email, DoctorInfo.degree,DoctorInfo.specialty).join(User, User.id == DoctorInfo.user_id).filter(DoctorInfo.valid==True).all()
+    return render_template("home.html", doctors = doctors)
 
 
 @app.route("/register", methods=['GET','POST'])
@@ -27,7 +47,7 @@ def register():
     form = UserRegisteration()
     if form.validate_on_submit():
         hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
-        user = User(name=form.name.data, lastname=form.lastname.data, email=form.email.data,
+        user = User(name=form.name.data, lastname=form.lastname.data, email=form.email.data, username=form.username.data,
             address = form.address.data, date_of_birth = form.date_of_birth.data, phone= form.phone.data,
             role=form.role.data ,password=hashed_password)
         db.session.add(user)
@@ -102,6 +122,7 @@ def profile():
     return render_template('profile.html', user=current_user , form=form)
 
 @app.route("/requests")
+@admin_required
 def requests():
     data = db.session.query(User.id, User.name, User.lastname,User.email, User.date_of_birth, DoctorInfo.degree,DoctorInfo.specialty, User.gender, DoctorInfo.valid).join(User, User.id == DoctorInfo.user_id).filter(DoctorInfo.valid==False).all()
     # doctors = [ i for i in data if i.valid==False]
@@ -109,11 +130,13 @@ def requests():
 
 
 @app.route("/users")
+@admin_required
 def users():
     users = User.query.all()
     return render_template("/usersList.html", users=users)
 
 @app.route("/delete/<int:id>")
+@admin_required
 def delete(id):
     user = User.query.filter_by(id=id).first()
     db.session.delete(user)
@@ -121,23 +144,37 @@ def delete(id):
     return redirect(url_for('users'))
 
 @app.route("/confirm/<int:id>")
+@admin_required
 def confirm(id):
-    doc = DoctorInfo.query.filter_by(id=id).first()
+    doc = DoctorInfo.query.filter_by(user_id=id).first()
     doc.valid = True
     db.session.commit()
     return redirect(url_for('requests'))
 
 @app.route("/schedule", methods=('GET', 'POST'))
+@doctor_or_admin_required
 def schedule():
     schedules = Schedule.query.all()
     form = CreateSchedule()
     if form.validate_on_submit():
-        sche = Schedule(doctor_id = current_user.id, start_date=form.start_date.data, end_date = form.end_date.data)
-        db.session.add(sche)
+        create_schedule = Schedule(doctor_id = current_user.id, start_date=form.start_date.data, end_date = form.end_date.data)
+        db.session.add(create_schedule)
         db.session.commit()
         return render_template('/schedule.html', form=form, schedules=schedules)
     return render_template("/schedule.html", form=form, schedules=schedules)
 
 @app.route("/appointment", methods=('GET', 'POST'))
+@admin_required
 def appointment():
     return render_template("/appointment.html")
+
+@app.route("/doctor_schedule/<int:id>", methods=('GET', 'POST'))
+def viewSchedule(id):
+    form = MakeAppointment()
+    doctor = User.query.filter_by(id=id).first()
+    return render_template("view_schedules.html", schedules=doctor.schedule, form=form)
+
+@app.route("/patient/appointment", methods=('GET', 'POST'))
+def patientAppointment():
+    patient_create_appointment = MakeAppointment()
+    return render_template('patientAppointment.html', form = patient_create_appointment)

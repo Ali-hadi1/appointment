@@ -1,0 +1,28 @@
+{% extends "layout/layout.html" %}
+
+{% block content %}
+{% include 'layout/home_header.html' %}
+
+<div class="row col-12 mt-8">
+    {% for schedule in schedules %}
+    <div class="col-md-6 offset-md-3 mb-3">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="modal-title text-capitalize">Available dates for appointing</h5>
+            </div>
+            <div class="card-body">
+                <div class="modal-body p-0">
+                    <span class="">Start Date:{{ schedule.start_date }}</span>
+                    <br>
+                    <span class="">End Date{{ schedule.end_date }}</span>
+                    <br>
+                    <div class="col-12 p-0 d-flex justify-content-end">
+                        <a class="btn btn-outline-info" href="{{url_for('patientAppointment')}}">appoint </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

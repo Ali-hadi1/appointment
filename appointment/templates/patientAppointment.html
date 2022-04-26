@@ -1,0 +1,45 @@
+{% extends "layout/layout.html" %}
+
+{% block content %}
+{% include 'layout/home_header.html' %}
+
+<div class="row col-12 mt-8">
+    <div class="col-lg-4 offset-lg-4">
+        <form action="" method="post">
+            {{ form.hidden_tag() }}
+            {{ form.schedule_id() }}
+            <div class="form-group">
+                {{ form.reason.label(class="form-control-label text-capitalize") }}
+                {% if form.reason.errors %}
+                    {{ form.reason(class="form-control form-control-lg is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for errors in form.reason.errors %}
+                            <span> {{ error }} </span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.reason(class="form-control form-control-lg input_style", placeholder="Reason of Appointment") }}
+                {% endif %}
+            </div>
+            <div class="form-group">
+                {{ form.date.label(class="form-control-label text-capitalize") }}
+                {% if form.date.errors %}
+                    {{ form.date(class="form-control form-control-lg is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for errors in form.date.errors %}
+                            <span> {{ error }} </span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.date(class="form-control form-control-lg input_style") }}
+                {% endif %}
+            </div>
+            <div class="float-right">
+                {{ form.submit(class="btn btn-outline-info") }}
+            </div>
+        </form>
+    </div>
+
+</div>
+
+{% endblock %}

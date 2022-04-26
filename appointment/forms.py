@@ -1,11 +1,12 @@
 from flask_wtf import FlaskForm
 from flask_login import current_user
-from wtforms import StringField, PasswordField, SubmitField, BooleanField, DateField, RadioField, SelectField
+from wtforms import StringField, PasswordField, SubmitField, BooleanField, DateField, RadioField, SelectField, TextAreaField, HiddenField
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError
 from appointment.models import User
 
 class UserRegisteration(FlaskForm):
     name = StringField('name', validators=[DataRequired(), Length(min=2 , max=8)])
+    username = StringField('username', validators=[DataRequired(), Length(min=4)])
     email = StringField('email',validators=[DataRequired(), Email()])
     lastname = StringField('lastname', validators=[DataRequired(), Length(min=4 , max=8)])
     address = StringField('address', validators=[DataRequired(), Length(max=200)])
@@ -53,4 +54,10 @@ class DoctorInfoForm(FlaskForm):
 class CreateSchedule(FlaskForm):
     start_date = DateField('start_date', validators=[DataRequired()])
     end_date = DateField('end_date', validators=[DataRequired()])
+    submit = SubmitField('submit')
+
+class MakeAppointment(FlaskForm):
+    id= HiddenField('schedule_id')
+    reason = TextAreaField('reason', validators=[DataRequired()])
+    date = DateField('end_date', validators=[DataRequired()])
     submit = SubmitField('submit')
