@@ -6,6 +6,7 @@ from appointment.models import User
 
 class UserRegisteration(FlaskForm):
     name = StringField('name', validators=[DataRequired(), Length(min=2 , max=8)])
+    username = StringField('username', validators=[DataRequired(), Length(min=4)])
     email = StringField('email',validators=[DataRequired(), Email()])
     lastname = StringField('lastname', validators=[DataRequired(), Length(min=4 , max=8)])
     address = StringField('address', validators=[DataRequired(), Length(max=200)])
