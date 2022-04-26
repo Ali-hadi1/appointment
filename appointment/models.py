@@ -47,7 +47,7 @@ class Schedule(db.Model):
 
 
     def __repr__(self):
-        return f"DoctorInfo('{self.id}', '{self.doctor_id}', '{self.start_date}', '{self.end_date})"
+        return f"Schedule('{self.id}', '{self.doctor_id}', '{self.start_date}', '{self.end_date})"
 
 class Appointment(db.Model):
     __tablename__='Appointment'
@@ -58,7 +58,7 @@ class Appointment(db.Model):
     appointment_date = db.Column(db.Date(), default = datetime.now().date() )
 
     def __repr__(self):
-        return f"DoctorInfo('{self.id}', '{self.patient_id}', '{self.schedule_id}', '{self.reason}', '{self.appointment_date}')"
+        return f"Appointment('{self.id}', '{self.patient_id}', '{self.schedule_id}', '{self.reason}', '{self.appointment_date}')"
 
 # class User(db.Model):
 #     id = db.Column(db.Integer, primary_key=True)
