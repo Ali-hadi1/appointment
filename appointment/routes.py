@@ -187,3 +187,9 @@ def patientAppointment(id):
         doctor_id = Schedule.query.filter_by(id = id).first()
         return redirect(url_for('viewSchedule', id=doctor_id.doctor_id))
     return render_template('patientAppointment.html', form = patient_create_appointment)
+
+@app.route("/admin/doctors/schedules", methods=('GET', 'POST'))
+@admin_required
+def doctorsSchedules():
+    doctors = db.session.query(User).join(Schedule, Schedule.doctor_id == User.id).group_by(User.id).all()
+    return render_template("/doctors_schedules.html", doctors = doctors)
