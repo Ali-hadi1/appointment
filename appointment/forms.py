@@ -57,7 +57,7 @@ class CreateSchedule(FlaskForm):
     submit = SubmitField('submit')
 
 class MakeAppointment(FlaskForm):
-    id= HiddenField('schedule_id')
+    schedule_id= HiddenField('schedule_id')
     reason = TextAreaField('reason', validators=[DataRequired()])
     date = DateField('end_date', validators=[DataRequired()])
     submit = SubmitField('submit')

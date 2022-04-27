@@ -174,7 +174,16 @@ def viewSchedule(id):
     doctor = User.query.filter_by(id=id).first()
     return render_template("view_schedules.html", schedules=doctor.schedule, form=form)
 
-@app.route("/patient/appointment", methods=('GET', 'POST'))
-def patientAppointment():
+@app.route("/patient/appointment/<int:id>", methods=('GET', 'POST'))
+def patientAppointment(id):
     patient_create_appointment = MakeAppointment()
+    patient_create_appointment.schedule_id.data = id
+    if patient_create_appointment.validate_on_submit():
+        new_patient_appointment = Appointment(schedule_id=patient_create_appointment.schedule_id.data,
+                                              reason = patient_create_appointment.reason.data,
+                                              appointment_date=patient_create_appointment.date.data)
+        db.session.add(new_patient_appointment)
+        db.session.commit()
+        doctor_id = Schedule.query.filter_by(id = id).first()
+        return redirect(url_for('viewSchedule', id=doctor_id.doctor_id))
     return render_template('patientAppointment.html', form = patient_create_appointment)

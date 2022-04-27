@@ -7,7 +7,6 @@
     <div class="col-lg-4 offset-lg-4">
         <form action="" method="post">
             {{ form.hidden_tag() }}
-            {{ form.schedule_id() }}
             <div class="form-group">
                 {{ form.reason.label(class="form-control-label text-capitalize") }}
                 {% if form.reason.errors %}
@@ -39,7 +38,6 @@
             </div>
         </form>
     </div>
-
 </div>
 
 {% endblock %}
