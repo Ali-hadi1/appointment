@@ -77,6 +77,11 @@ def login():
     form = Login()
     if form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data).first()
+        if user.role == 2:
+            doctor_info = user.doctorinfo
+            if doctor_info[0].valid == False:
+                flash('Dear Doctor your Account is not activate yet!', 'info')
+                return redirect(url_for('home'))
         if user and bcrypt.check_password_hash(user.password, form.password.data):
             login_user(user, remember=form.remember.data)
             if user.role == 1:
@@ -154,14 +159,13 @@ def confirm(id):
 @app.route("/schedule", methods=('GET', 'POST'))
 @doctor_or_admin_required
 def schedule():
-    schedules = Schedule.query.all()
     form = CreateSchedule()
     if form.validate_on_submit():
         create_schedule = Schedule(doctor_id = current_user.id, start_date=form.start_date.data, end_date = form.end_date.data)
         db.session.add(create_schedule)
         db.session.commit()
-        return render_template('/schedule.html', form=form, schedules=schedules)
-    return render_template("/schedule.html", form=form, schedules=schedules)
+        return render_template('/schedule.html', form=form, schedules=current_user.schedule)
+    return render_template("/schedule.html", form=form, schedules=current_user.schedule)
 
 @app.route("/appointment", methods=('GET', 'POST'))
 @admin_required
@@ -175,6 +179,7 @@ def viewSchedule(id):
     return render_template("view_schedules.html", schedules=doctor.schedule, form=form)
 
 @app.route("/patient/appointment/<int:id>", methods=('GET', 'POST'))
+@login_required
 def patientAppointment(id):
     patient_create_appointment = MakeAppointment()
     patient_create_appointment.schedule_id.data = id
@@ -193,3 +198,30 @@ def patientAppointment(id):
 def doctorsSchedules():
     doctors = db.session.query(User).join(Schedule, Schedule.doctor_id == User.id).group_by(User.id).all()
     return render_template("/doctors_schedules.html", doctors = doctors)
+
+@app.route("/admin/doctors/schedules/detials/<int:id>", methods=('GET', 'POST'))
+@admin_required
+def doctorScheduleDetials(id):
+    doctor = User.query.filter_by(id = id).first()
+    create_schedule = CreateSchedule()
+    return render_template("/adminPanel/doctor_schedule_list.html", schedules = doctor.schedule, form=create_schedule)
+
+@app.route("/admin/doctors/schedules/delete/<int:id>")
+@admin_required
+def DeleteDoctorSchedule(id):
+    schedule_delete = Schedule.query.filter_by(id=id).first()
+    id = schedule_delete.doctor_id
+    db.session.delete(schedule_delete)
+    db.session.commit()
+    return redirect(url_for('doctorScheduleDetials', id = id))
+
+@app.route("/admin/doctors/schedules/edit/<int:id>")
+@admin_required
+def EditDoctorSchedule(id):
+    form = CreateSchedule()
+    if form.validate_on_submit():
+        pass
+    schedule_for_edit = Schedule.query.filter_by(id=id).first()
+    form.start_date.data = schedule_for_edit.start_date
+    form.end_date.data = schedule_for_edit.end_date
+    return redirect(url_for('doctorScheduleDetials', id = id))

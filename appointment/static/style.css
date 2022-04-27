@@ -80,3 +80,7 @@ a:hover{
 ul{
     list-style-type: none;
 }
+.disable-a{
+    pointer-events: none;
+    cursor: default;
+}
