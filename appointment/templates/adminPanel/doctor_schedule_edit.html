@@ -1,17 +1,17 @@
 {% extends "index.html" %}
 
 {% block section %}
-<div>
-    <div>
+<div class="full-hv d-flex justify-content-center align-items-center">
+    <div class="col-md-6">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Create Schedual</h5>
+                <h5 class="modal-title">Create Schedule</h5>
             </div>
             <div class="modal-body">
                 <form method="post">
                     {{ form.hidden_tag() }}
                     <div class="form-group">
-                        {{ form.start_date.label(class="form-control-label text-capitalize",) }}
+                        {{ form.start_date.label(class="form-control-label text-capitalize") }}
                         {% if form.start_date.errors %}
                         {{ form.start_date(class="form-control form-control-lg is-invalid") }}
                         <div class="invalid-feedback">

@@ -32,7 +32,7 @@
                                     </td>
                                     <td class="text-center">{{schedule.end_date}}</td>
                                     <td class="text-center">
-                                        <a href="" class=" text-success">
+                                        <a href="{{ url_for('admin_edit_doctor_schedule', id= schedule.id) }}" class=" text-success">
                                             <i class="bi bi-pen"></i>
                                         </a>
                                         <a href="{{url_for('DeleteDoctorSchedule',id=schedule.id)}}" class="text-danger">
@@ -47,7 +47,7 @@
             </div>
         </div>
     </div>
-    
+
     <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
         aria-hidden="true">
         <div class="modal-dialog" role="document">
@@ -63,7 +63,7 @@
                         {{ form.hidden_tag() }}
                         <div class="form-group">
                             {{ form.start_date.label(class="form-control-label text-capitalize",) }}
-                            {% if form.start_date.errors %}
+                            {% if   form.start_date.errors %}
                                 {{ form.start_date(class="form-control form-control-lg is-invalid") }}
                                 <div class="invalid-feedback">
                                     {% for errors in form.start_date.errors %}

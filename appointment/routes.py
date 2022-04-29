@@ -7,6 +7,8 @@ from flask_login import login_user, current_user, logout_user, login_required
 from datetime import datetime
 from sqlalchemy import and_
 
+base_url = 'http://127.0.0.1:9000'
+
 
 def admin_required(f):
     @wraps(f)
@@ -174,7 +176,7 @@ def schedule():
 def appointment():
     return render_template("/appointment.html")
 
-@app.route("/doctor_schedule/<int:id>", methods=('GET', 'POST'))
+@app.route("/doctor/schedule/<int:id>", methods=('GET', 'POST'))
 def viewSchedule(id):
     form = MakeAppointment()
     doctor = User.query.filter_by(id=id).first()
@@ -212,25 +214,44 @@ def doctorsSchedules():
 @admin_required
 def doctorScheduleDetials(id):
     doctor = User.query.filter_by(id = id).first()
-    create_schedule = CreateSchedule()
-    return render_template("/adminPanel/doctor_schedule_list.html", schedules = doctor.schedule, form=create_schedule)
+    form = CreateSchedule()
+    if form.validate_on_submit():
+        Schedule(doctor.id, form.start_date.data, form.end_date.data)
+        return redirect(url_for('doctorScheduleDetials', id=doctor.id))
+    return render_template("adminPanel/doctor_schedule_list.html", schedules=doctor.schedule, form=form)
 
 @app.route("/admin/doctors/schedules/delete/<int:id>")
-@admin_required
+@doctor_or_admin_required
 def DeleteDoctorSchedule(id):
     schedule_delete = Schedule.query.filter_by(id=id).first()
     id = schedule_delete.doctor_id
-    db.session.delete(schedule_delete)
-    db.session.commit()
-    return redirect(url_for('doctorScheduleDetials', id = id))
+    schedule_delete.delete_doctor_schedule()
+    if request.url == base_url+"/admin/doctors/schedules/delete/<int:id>":
+        return redirect(url_for('doctorScheduleDetials', id = id))
+    return redirect(url_for('schedule'))
 
-@app.route("/admin/doctors/schedules/edit/<int:id>")
+@app.route("/admin/doctors/schedules/edit/<int:id>", methods=['GET', 'POST'])
 @admin_required
-def EditDoctorSchedule(id):
+def admin_edit_doctor_schedule(id):
     form = CreateSchedule()
+    doctor_schedule = Schedule.query.filter_by(id=id).first()
     if form.validate_on_submit():
-        pass
-    schedule_for_edit = Schedule.query.filter_by(id=id).first()
-    form.start_date.data = schedule_for_edit.start_date
-    form.end_date.data = schedule_for_edit.end_date
-    return redirect(url_for('doctorScheduleDetials', id = id))
+        doctor_schedule.update_doctor_schedule(form.start_date.data, form.end_date.data)
+        flash("Schedule successfully edited", 'info')
+        return redirect(url_for('doctorScheduleDetials', id=doctor_schedule.doctor_id))
+    form.start_date.data = doctor_schedule.start_date
+    form.end_date.data = doctor_schedule.end_date
+    return render_template('adminPanel/doctor_schedule_edit.html', form=form, id=doctor_schedule.doctor_id)
+
+@app.route("/doctors/schedules/edit/<int:id>", methods=['GET', 'POST'])
+@doctor_or_admin_required
+def doctor_edit_schedule(id):
+    form = CreateSchedule()
+    doctor_schedule = Schedule.query.filter_by(id=id).first()
+    if form.validate_on_submit():
+        doctor_schedule.update_doctor_schedule(form.start_date.data, form.end_date.data)
+        flash("Schedule successfully edited", 'info')
+        return redirect(url_for('schedule'))
+    form.start_date.data = doctor_schedule.start_date
+    form.end_date.data = doctor_schedule.end_date
+    return render_template('edit_schedule.html', form=form, id=doctor_schedule.doctor_id)
