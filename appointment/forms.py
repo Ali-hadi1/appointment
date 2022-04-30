@@ -25,11 +25,13 @@ class UserRegisteration(FlaskForm):
 
 class UpdateAccount(FlaskForm):
     name = StringField('name', validators=[DataRequired(), Length(min=2, max=8)])
+    username = StringField('username', validators=[DataRequired(), Length(min=4)])
     email = StringField('email', validators=[DataRequired(), Email()])
     lastname = StringField('lastname', validators=[DataRequired(), Length(min=4, max=8)])
     address = StringField('address', validators=[DataRequired(), Length(max=200)])
     date_of_birth = DateField('date_of_birth', validators=[DataRequired()])
     phone = StringField('phone', validators=[DataRequired(), Length(min=10, max=14)])
+    # role = SelectField('update role', choices=[(2, 'Doctor'), (3, 'Patient'), (1, 'admin')])
     submit = SubmitField('update')
 
     def validate_email(self, email):

@@ -16,7 +16,10 @@
                     <br>
                     <span class="">End Date{{ schedule.end_date }}</span>
                     <br>
-                    <div class="col-12 p-0 d-flex justify-content-end">
+                    <div class="col-12 p-0 d-flex justify-content-between">
+                        {% if current_user.id == schedule.doctor_id %}
+                            <a class="btn btn-outline-info" href="{{url_for('appointed_patient', id=schedule.id)}}">appointed patient </a>
+                        {% endif %}
                         {% if current_user.id == schedule.doctor_id %}
                             <a class="btn btn-outline-info disable-a" href="{{url_for('patientAppointment', id=schedule.id)}}">appoint </a>
                         {% else %}

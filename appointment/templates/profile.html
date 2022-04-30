@@ -5,10 +5,12 @@
     <div class="row">
         <div class="col-sm-3">
 
-            <div class="text-center">
-                <img src="http://ssl.gstatic.com/accounts/ui/avatar_2x.png" class="avatar img-circle img-thumbnail"
-                    alt="avatar">
-                <input type="file" class="text-center center-block file-upload">
+            <div class="d-flex justify-content-center align-items-center">
+                <div class="bg-info rounded-circle" style="height: 80%; width: 80%;">
+                    <span class="d-flex justify-content-center align-items-center white text-capitalize" style="font-size: 8rem;">
+                        {{user.name[0]}}
+                    </span>
+                </div>
             </div>
             </hr>
             <br>
@@ -43,8 +45,7 @@
                                     {% endfor %}
                                 </div>
                                 {% else %}
-                                {{ form.name(class="form-control form-control-lg input_style", placeholder="Enter your
-                                Name") }}
+                                {{ form.name(class="form-control form-control-lg input_style",value=user.name) }}
                                 {% endif %}
 
                             </div>
@@ -60,14 +61,28 @@
                                     {% endfor %}
                                 </div>
                                 {% else %}
-                                {{ form.lastname(class="form-control form-control-lg input_style", placeholder="Enter
-                                your Lastname") }}
+                                {{ form.lastname(class="form-control form-control-lg input_style", value=user.lastname) }}
                                 {% endif %}
 
                             </div>
                         </div>
                     </div>
                     <div class="row">
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                {{ form.username.label(class="form-control-label text-capitalize") }}
+                                {% if form.username.errors %}
+                                {{ form.username(class="form-control form-control-lg is-invalid") }}
+                                <div class="invalid-feedback">
+                                    {% for errors in form.username.errors %}
+                                    <span> {{ error }} </span>
+                                    {% endfor %}
+                                </div>
+                                {% else %}
+                                {{ form.username(class="form-control form-control-lg input_style", value=user.username) }}
+                                {% endif %}
+                            </div>
+                        </div>
                         <div class="col-lg-6">
                             <div class="form-group">
                                 {{ form.email.label(class="form-control-label text-capitalize") }}
@@ -79,24 +94,7 @@
                                     {% endfor %}
                                 </div>
                                 {% else %}
-                                {{ form.email(class="form-control form-control-lg input_style", placeholder="Enter your
-                                Email") }}
-                                {% endif %}
-                            </div>
-                        </div>
-                        <div class="col-lg-6">
-                            <div class="form-group">
-                                {{ form.address.label(class="form-control-label text-capitalize") }}
-                                {% if form.address.errors %}
-                                {{ form.address(class="form-control form-control-lg is-invalid") }}
-                                <div class="invalid-feedback">
-                                    {% for errors in form.address.errors %}
-                                    <span> {{ error }} </span>
-                                    {% endfor %}
-                                </div>
-                                {% else %}
-                                {{ form.address(class="form-control form-control-lg input_style", placeholder="Enter
-                                your address") }}
+                                {{ form.email(class="form-control form-control-lg input_style", value=user.email) }}
                                 {% endif %}
                             </div>
                         </div>
@@ -113,11 +111,27 @@
                                     {% endfor %}
                                 </div>
                                 {% else %}
-                                {{ form.phone(class="form-control form-control-lg input_style" , placeholder="Enter your
-                                Phone") }}
+                                {{ form.phone(class="form-control form-control-lg input_style", value=user.phone) }}
                                 {% endif %}
                             </div>
                         </div>
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                {{ form.address.label(class="form-control-label text-capitalize") }}
+                                {% if form.address.errors %}
+                                {{ form.address(class="form-control form-control-lg is-invalid") }}
+                                <div class="invalid-feedback">
+                                    {% for errors in form.address.errors %}
+                                    <span> {{ error }} </span>
+                                    {% endfor %}
+                                </div>
+                                {% else %}
+                                {{ form.address(class="form-control form-control-lg input_style", value=user.address) }}
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
                         <div class="col-lg-6">
                             <div class="form-group">
                                 {{ form.date_of_birth.label(class="form-control-label text-capitalize") }}
@@ -129,7 +143,7 @@
                                     {% endfor %}
                                 </div>
                                 {% else %}
-                                {{ form.date_of_birth(class="form-control form-control-lg input_style") }}
+                                {{ form.date_of_birth(class="form-control form-control-lg input_style", value=user.date_of_birth) }}
                                 {% endif %}
                             </div>
                         </div>
