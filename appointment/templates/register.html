@@ -107,8 +107,8 @@
                 </div>
                 <div class="row">
                     <div class="col-lg-6">
-                        <div class="form-check">
-                            {{ form.role.label(class="form-check-label text-capitalize") }}
+                        <div class="form-check p-0">
+                            {{ form.role.label(class="form-check-label text-capitalize pb-2") }}
                             {% if form.role.errors %}
                                 {{ form.role(class="form-control form-control-lg is-invalid") }}
                                 <div class="invalid-feedback">
@@ -117,7 +117,7 @@
                                     {% endfor %}
                                 </div>
                             {% else %}
-                                {{ form.role(class="form-control form-control-lg input_style custom-check-style") }}
+                                {{ form.role(class="form-control input_style") }}
                             {% endif %}
                         </div>
                     </div>
@@ -187,8 +187,13 @@
                     </div>
                 </div>
             </fieldset>
-            <div class="form-group mt-3">
+            <div class="form-group mt-3 d-flex justify-content-between">
                 {{ form.submit(class="btn btn-outline-info") }}
+                <div class="app-normal-font d-flex align-items-center">
+                    <a href="{{ url_for('login') }}">
+                        Already has Account!
+                    </a>
+                </div>
             </div>
         </form>
     </div>

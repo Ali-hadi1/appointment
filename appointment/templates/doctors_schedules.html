@@ -48,7 +48,7 @@
                                     {% endif %}
                                 </td>
                                 <td class="text-center">
-                                    <a href="{{ url_for('doctorScheduleDetials', id = doctor.id)}}" class="text-info" style="font-size:16px">
+                                    <a href="{{ url_for('get_and_create_doctor_schedule', id = doctor.id)}}" class="text-info" style="font-size:16px">
                                         <i class="bi bi-card-list"></i>
                                     </a>
                                     <a href="{{ url_for('delete', id = doctor.id)}}" class="text-danger">

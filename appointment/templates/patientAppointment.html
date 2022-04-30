@@ -3,24 +3,11 @@
 {% block content %}
 {% include 'layout/home_header.html' %}
 
-<div class="row col-12 mt-8">
-    <div class="col-lg-4 offset-lg-4">
+<div class="h-full content-center">
+    <div class="col-lg-4">
         <form action="" method="post">
+            <legend class="d-flex justify-content-center mb-3">Appointment Form</legend>
             {{ form.hidden_tag() }}
-{#            <div class="form-group">#}
-{#                <label class="form-control-label , text-capitalize" for="reason"> Reason </label>#}
-{#                <textarea type="text" name="reason" class="form-control form-control-lg , input_style"#}
-{#                          placeholder="reason of Appointment" required></textarea>#}
-{#            </div>#}
-{#            <div class="form-group">#}
-{#                <label class="form-control-label , text-capitalize" for="date"> Select Appointment Date</label>#}
-{#                <input type="date" name="reason" class="form-control form-control-lg , input_style" required#}
-{#                       min="{{ seleted_schedule.start_date }}" max="{{ seleted_schedule.end_date }}"#}
-{#                />#}
-{#            </div>#}
-{#            <div class="float-right">#}
-{#                <button type="submit" class="btn btn-outline-info">submit</button>#}
-{#            </div>#}
             <div class="form-group">
                 {{ form.reason.label(class="form-control-label text-capitalize") }}
                 {% if form.reason.errors %}

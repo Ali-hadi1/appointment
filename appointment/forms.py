@@ -51,7 +51,9 @@ class DoctorInfoForm(FlaskForm):
     specialty = StringField('speciality', validators=[DataRequired(), Length(min=4 , max=200)])
     submit = SubmitField('submit')
 
+
 class CreateSchedule(FlaskForm):
+    name = StringField('name', validators=[DataRequired(), Length(min=4, max=20)])
     start_date = DateField('start_date', validators=[DataRequired()])
     end_date = DateField('end_date', validators=[DataRequired()])
     submit = SubmitField('submit')
