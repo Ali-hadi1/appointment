@@ -29,6 +29,7 @@ def doctor_or_admin_required(f):
     return wrap
 
 @app.route("/dashboard")
+@login_required
 @admin_required
 def dashboard():
     if current_user.role == 1:
@@ -131,6 +132,7 @@ def profile():
     return render_template('profile.html', user=current_user , form=form)
 
 @app.route("/requests")
+@login_required
 @admin_required
 def requests():
     data = db.session.query(User.id, User.name, User.lastname,User.email, User.date_of_birth, DoctorInfo.degree,DoctorInfo.specialty, User.gender, DoctorInfo.valid).join(User, User.id == DoctorInfo.user_id).filter(DoctorInfo.valid==False).all()
@@ -139,12 +141,14 @@ def requests():
 
 
 @app.route("/users")
+@login_required
 @admin_required
 def users():
     users = User.query.all()
     return render_template("/usersList.html", users=users)
 
 @app.route("/delete/<int:id>")
+@login_required
 @admin_required
 def delete(id):
     user = User.query.filter_by(id=id).first()
@@ -255,3 +259,13 @@ def doctor_edit_schedule(id):
     form.start_date.data = doctor_schedule.start_date
     form.end_date.data = doctor_schedule.end_date
     return render_template('edit_schedule.html', form=form, id=doctor_schedule.doctor_id)
+
+
+
+@app.route("/appointed/patient/<int:id>", methods=['GET', 'POST'])
+@login_required
+@doctor_or_admin_required
+def appointed_patient(id):
+    patinet_list = db.session.query(User.name, User.lastname, User.phone, User.gender, Appointment.reason, Appointment.appointment_date)\
+    .join(Appointment, User.id==Appointment.patient_id).filter(Appointment.schedule_id == id).all()
+    return render_template('appointed_patients.html', patients = patinet_list)
