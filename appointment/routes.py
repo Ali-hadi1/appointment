@@ -262,10 +262,38 @@ def doctor_edit_schedule(id):
 
 
 
-@app.route("/appointed/patient/<int:id>", methods=['GET', 'POST'])
+@app.route("/appointed/patient/<int:id>", methods=['GET'])
 @login_required
 @doctor_or_admin_required
 def appointed_patient(id):
     patinet_list = db.session.query(User.name, User.lastname, User.phone, User.gender, Appointment.reason, Appointment.appointment_date)\
     .join(Appointment, User.id==Appointment.patient_id).filter(Appointment.schedule_id == id).all()
     return render_template('appointed_patients.html', patients = patinet_list)
+
+
+@app.route("/admin/appointed/patient/list", methods=['GET'])
+@login_required
+@admin_required
+def appointed_patient_list():
+    patinet_list = db.session.query(User.name, User.lastname, User.phone, User.gender, Appointment.reason, Appointment.id, Appointment.appointment_date)\
+    .join(Appointment, User.id==Appointment.patient_id).all()
+    return render_template('adminPanel/appointment_list.html', patients = patinet_list)
+
+
+@app.route("/admin/user/info/<int:id>", methods=['GET', 'POST'])
+@login_required
+@admin_required
+def user_info(id):
+    form = UpdateAccount()
+    user_info = User.query.filter_by(id=id).first()
+    return render_template('user_info.html', user=user_info, form=form)
+
+
+@app.route("/admin/delete/appointmet/<int:id>", methods=['GET', 'POST'])
+@login_required
+@admin_required
+def delete_appointment(id):
+    selected_appointment = Appointment.query.filter_by(id=id).first()
+    db.session.delete(selected_appointment)
+    db.session.commit()
+    return redirect(url_for('appointed_patient_list'))

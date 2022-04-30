@@ -1,9 +1,9 @@
 {% extends "layout/content_handler.html" %}
 
 {% block sidebar %}
-    <div class="row">
-        <nav class="col-lg-12  h-full pt-3">
-            <div class="sideba1r-sticky">
+<div class="row">
+    <nav class="col-lg-12  h-full pt-3">
+        <div class="sideba1r-sticky">
             <ul class="nav flex-column text-block ">
                 <li class="nav-item">
                     <a class="nav-link active no-hover white" href="{{url_for('dashboard')}}">
@@ -13,29 +13,28 @@
                 </li>
                 <li class="nav-item">
                     <a class="nav-link no-hover white" href="{{ url_for('users')}}">
+                        <i class="bi bi-people"></i>
                         Users
                     </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link no-hover white" href="{{url_for('doctorsSchedules')}}">
+                        <i class="bi bi-card-list"></i>
                         Doctors Scheduals
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link no-hover white" href="#">
+                    <a class="nav-link no-hover white" href="{{ url_for('appointed_patient_list') }}">
+                        <i class="bi bi-clipboard2-pulse"></i>
                         Appointment Data
                     </a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link no-hover white" href="#">
-                        Reports
-                    </a>
             </ul>
-            </div>
-        </nav>
-    </div>
+        </div>
+    </nav>
+</div>
 {% endblock %}
 
 {% block section %}
-    
+
 {% endblock %}

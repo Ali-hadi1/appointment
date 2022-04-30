@@ -58,7 +58,7 @@
                                         {% endif %}
                                     </td>
                                     <td class="text-center">
-                                        <a href="" class="text-info">
+                                        <a href="{{ url_for('user_info', id=user.id)}}" class="text-info">
                                             <i class="bi bi-person-circle"></i>
                                         </a>
                                         <a href="{{ url_for('delete', id = user.id)}}" class="text-danger">
