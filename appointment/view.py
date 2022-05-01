@@ -1,12 +1,13 @@
 from flask import render_template, redirect, url_for, request, flash
 from appointment import db
-from appointment.forms import DoctorInfoForm, CreateSchedule, MakeAppointment
+from appointment.forms import DoctorInfoForm, CreateSchedule, MakeAppointment, UpdateAccount, EditUserInfo
 from appointment.models import DoctorInfo, User, Schedule, Appointment
 from flask_login import current_user
 from sqlalchemy import and_
 from datetime import datetime
 
 base_url = 'http://127.0.0.1:9000'
+
 
 def create_doctor_info(id):
     form = DoctorInfoForm()
@@ -18,6 +19,9 @@ def create_doctor_info(id):
 
 
 def delete_user(id):
+    if current_user.id == id:
+        flash("Ooops, unable to delete your self!", "warning")
+        redirect(url_for("users"))
     user = User.query.filter_by(id=id).first()
     user.delete_user()
     return redirect(url_for('users'))
@@ -89,4 +93,41 @@ def edit_doctor_schedule(id):
     return render_template('edit_schedule.html', form=form, id=doctor_schedule.doctor_id)
 
 
+def appointed_patient_on_a_schedule(id):
+    patient_list = db.session.query(User.name, User.lastname, User.phone, User.gender, Appointment.reason, Appointment.appointment_date)\
+                    .join(Appointment, User.id == Appointment.patient_id).filter(Appointment.schedule_id == id).all()
+    return render_template('appointed_patients.html', patients=patient_list)
+
+
+def all_appointed_patient_list():
+    all_appointed_patient = db.session.query(User.name, User.lastname, User.phone, User.gender,
+                         Appointment.reason, Appointment.id, Appointment.appointment_date)\
+                         .join(Appointment, User.id == Appointment.patient_id).all()
+    return render_template('adminPanel/appointment_list.html', patients=all_appointed_patient)
+
+
+def get_user_info(id):
+    form = EditUserInfo()
+    user_info = User.query.filter_by(id=id).first()
+    return render_template('user_info.html', user=user_info, form=form)
+
+
+def delete_an_appointment(id):
+    selected_appointment = Appointment.query.filter_by(id=id).first()
+    selected_appointment.delete_appointment()
+    return redirect(url_for('appointed_patient_list'))
+
+
+def current_user_profile():
+    form = UpdateAccount()
+    if form.validate_on_submit():
+        current_user.update_user(form.name.data, form.lastname.data, form.username.data, form.email.data,
+                                 form.address.data, form.phone.data, form.date_of_birth.data, current_user.gender)
+        flash('Your account Updated Successfully', 'success')
+        if request.url == base_url + "/admin/profile":
+            return redirect(url_for('admin_profile'))
+        return redirect(url_for('profile'))
+    if request.url == base_url + "/admin/profile":
+        return render_template("adminPanel/admin_profile.html", form=form)
+    return render_template('profile.html', form=form)
 

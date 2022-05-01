@@ -1,30 +1,29 @@
-from flask import Flask, render_template, url_for, flash, redirect, request
-from appointment import app, db, bcrypt
-from appointment.auth import create_account, user_login, admin_required, doctor_or_admin_required
+from flask import render_template, url_for, redirect
+from appointment import app, db
+from appointment.auth import create_account, user_login
 from appointment.view import create_doctor_info, delete_user, create_schedule, view_doctor_schedule,\
                              patient_create_appointment, admin_create_doctor_schedule, delete_doctor_schedule,\
-                             edit_doctor_schedule
-from functools import wraps
-from appointment.models import User, DoctorInfo, Schedule, Appointment
-from appointment.forms import UpdateAccount, UserRegisteration, Login, DoctorInfoForm, CreateSchedule, MakeAppointment
-from flask_login import login_user, current_user, logout_user, login_required
+                             edit_doctor_schedule, appointed_patient_on_a_schedule, all_appointed_patient_list,\
+                             get_user_info, delete_an_appointment, current_user_profile
+from appointment.privilege import admin_required, doctor_or_admin_required
+from appointment.queries import get_all_confirmed_doctors, get_all_requested_doctors, get_all_doctors_has_schedule
+from appointment.models import User, DoctorInfo, Schedule
+from flask_login import logout_user, login_required
+
 
 @app.route("/dashboard")
+@login_required
 @admin_required
 def dashboard():
-    if current_user.role == 1:
-        doc_request = DoctorInfo.query.filter_by(valid=False).all()
-        count = len(doc_request)
-        return render_template("dashboard.html", count = count)
-    else:
-        flash("Oops, you haven't right privilage", 'info')
-        return redirect(url_for('home'))
+    doc_request = DoctorInfo.query.filter_by(valid=False).all()
+    count = len(doc_request)
+    return render_template("dashboard.html", count=count)
+
 
 @app.route("/")
 @app.route("/home")
 def home():
-    doctors = db.session.query(User.id, User.name, User.lastname,User.email, DoctorInfo.degree,DoctorInfo.specialty).join(User, User.id == DoctorInfo.user_id).filter(DoctorInfo.valid==True).all()
-    return render_template("home.html", doctors = doctors)
+    return render_template("home.html", doctors=get_all_confirmed_doctors())
 
 
 @app.route("/register", methods=['GET','POST'])
@@ -51,41 +50,18 @@ def logout():
 @app.route("/profile", methods=('GET', 'POST'))
 @login_required
 def profile():
-    form = UpdateAccount()
-    if form.validate_on_submit():
-        if form.email.data != current_user.email:
-            user = User.query.filter_by(email=form.email.data).first()
-            if user:
-                flash("This email already exist!", 'warning')
-                return redirect(url_for('profile'))
-        current_user.name = form.name.data
-        current_user.lastname = form.lastname.data
-        current_user.email = form.email.data
-        current_user.address = form.address.data
-        current_user.phone = form.phone.data
-        current_user.date_of_birth = form.date_of_birth.data
-        db.session.commit()
-        flash('Your account Updated Successfully', 'success')
-        return redirect(url_for('profile'))
-    elif request.method == 'GET':
-        form.name.data = current_user.name
-        form.lastname.data = current_user.lastname
-        form.email.data = current_user.email
-        form.address.data = current_user.address
-        form.phone.data = current_user.phone
-        form.date_of_birth.data = current_user.date_of_birth
-    return render_template('profile.html', user=current_user , form=form)
+    return current_user_profile()
 
 
 @app.route("/requests")
+@login_required
 @admin_required
 def requests():
-    data = db.session.query(User.id, User.name, User.lastname,User.email, User.date_of_birth, DoctorInfo.degree,DoctorInfo.specialty, User.gender, DoctorInfo.valid).join(User, User.id == DoctorInfo.user_id).filter(DoctorInfo.valid==False).all()
-    # doctors = [ i for i in data if i.valid==False]
-    return render_template('request_table.html', doctors = data)
+    return render_template('request_table.html', doctors=get_all_requested_doctors())
 
 
 @app.route("/users")
+@login_required
 @admin_required
 def users():
     users = User.query.all()
@@ -93,12 +69,14 @@ def users():
 
 
 @app.route("/delete/<int:id>")
+@login_required
 @admin_required
 def delete(id):
     return delete_user(id)
 
 
 @app.route("/confirm/<int:id>")
+@login_required
 @admin_required
 def confirm(id):
     doc = DoctorInfo.query.filter_by(user_id=id).first()
@@ -108,12 +86,14 @@ def confirm(id):
 
 
 @app.route("/schedule", methods=('GET', 'POST'))
+@login_required
 @doctor_or_admin_required
 def schedule():
     return create_schedule()
 
 
 @app.route("/appointment", methods=('GET', 'POST'))
+@login_required
 @admin_required
 def appointment():
     return render_template("appointment.html")
@@ -131,31 +111,71 @@ def patientAppointment(id):
 
 
 @app.route("/admin/doctors/schedules", methods=('GET', 'POST'))
+@login_required
 @admin_required
 def doctorsSchedules():
-    doctors = db.session.query(User).join(Schedule, Schedule.doctor_id == User.id).group_by(User.id).all()
-    return render_template("/doctors_schedules.html", doctors=doctors)
+    return render_template("/doctors_schedules.html", doctors=get_all_doctors_has_schedule())
 
 
 @app.route("/admin/doctors/schedules/details/<int:id>", methods=('GET', 'POST'))
+@login_required
 @admin_required
 def get_and_create_doctor_schedule(id):
     return admin_create_doctor_schedule(id)
 
 
 @app.route("/admin/doctors/schedules/delete/<int:id>")
+@login_required
 @doctor_or_admin_required
 def DeleteDoctorSchedule(id):
     return delete_doctor_schedule(id)
 
 
 @app.route("/admin/doctors/schedules/edit/<int:id>", methods=['GET', 'POST'])
+@login_required
 @admin_required
 def admin_edit_doctor_schedule(id):
     return edit_doctor_schedule(id)
 
 
 @app.route("/doctors/schedules/edit/<int:id>", methods=['GET', 'POST'])
+@login_required
 @doctor_or_admin_required
 def doctor_edit_schedule(id):
     return edit_doctor_schedule(id)
+
+
+@app.route("/appointed/patient/<int:id>", methods=['GET'])
+@login_required
+@doctor_or_admin_required
+def appointed_patient(id):
+    return appointed_patient_on_a_schedule(id)
+
+
+@app.route("/admin/appointed/patient/list", methods=['GET'])
+@login_required
+@admin_required
+def appointed_patient_list():
+    return all_appointed_patient_list()
+
+
+@app.route("/admin/user/info/<int:id>", methods=['GET'])
+@login_required
+@admin_required
+def user_info(id):
+    return get_user_info(id)
+
+
+@app.route("/admin/delete/appointmet/<int:id>", methods=['GET', 'POST'])
+@login_required
+@admin_required
+def delete_appointment(id):
+    return delete_an_appointment(id)
+
+
+@app.route("/admin/profile", methods=['GET', 'POST'])
+@login_required
+@admin_required
+def admin_profile():
+    return current_user_profile()
+

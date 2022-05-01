@@ -4,6 +4,7 @@ from wtforms import StringField, PasswordField, SubmitField, BooleanField, DateF
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError
 from appointment.models import User
 
+
 class UserRegisteration(FlaskForm):
     name = StringField('name', validators=[DataRequired(), Length(min=2 , max=8)])
     username = StringField('username', validators=[DataRequired(), Length(min=4)])
@@ -23,6 +24,12 @@ class UserRegisteration(FlaskForm):
         if user:
             raise ValidationError("this email already exist!")
 
+    def validate_username(self, username):
+        user = User.query.filter_by(username=username.data).first()
+        if user:
+            raise ValidationError("this Username already exist!")
+
+
 class UpdateAccount(FlaskForm):
     name = StringField('name', validators=[DataRequired(), Length(min=2, max=8)])
     username = StringField('username', validators=[DataRequired(), Length(min=4)])
@@ -31,7 +38,6 @@ class UpdateAccount(FlaskForm):
     address = StringField('address', validators=[DataRequired(), Length(max=200)])
     date_of_birth = DateField('date_of_birth', validators=[DataRequired()])
     phone = StringField('phone', validators=[DataRequired(), Length(min=10, max=14)])
-    # role = SelectField('update role', choices=[(2, 'Doctor'), (3, 'Patient'), (1, 'admin')])
     submit = SubmitField('update')
 
     def validate_email(self, email):
@@ -39,6 +45,12 @@ class UpdateAccount(FlaskForm):
             user = User.query.filter_by(email=email.data).first()
             if user:
                 raise ValidationError("this email already exist!")
+
+    def validate_username(self, username):
+        if username.data != current_user.username:
+            user = User.query.filter_by(username=username.data).first()
+            if user:
+                raise ValidationError("this Username already exist!")
 
 class Login(FlaskForm):
     email = StringField('email', validators=[DataRequired(), Email()])
@@ -60,8 +72,33 @@ class CreateSchedule(FlaskForm):
     end_date = DateField('end_date', validators=[DataRequired()])
     submit = SubmitField('submit')
 
+
 class MakeAppointment(FlaskForm):
     schedule_id= HiddenField('schedule_id')
     reason = TextAreaField('reason', validators=[DataRequired()])
     date = DateField('end_date', validators=[DataRequired()])
     submit = SubmitField('submit')
+
+
+class EditUserInfo(FlaskForm):
+    user_id = HiddenField('user_id')
+    name = StringField('name', validators=[DataRequired(), Length(min=2, max=8)])
+    username = StringField('username', validators=[DataRequired(), Length(min=4)])
+    email = StringField('email', validators=[DataRequired(), Email()])
+    lastname = StringField('lastname', validators=[DataRequired(), Length(min=4, max=8)])
+    address = StringField('address', validators=[DataRequired(), Length(max=200)])
+    date_of_birth = DateField('date_of_birth', validators=[DataRequired()])
+    phone = StringField('phone', validators=[DataRequired(), Length(min=10, max=14)])
+    role = SelectField('Register As', choices=[(2, 'Doctor'), (3, 'Patient'), (1, 'admin')])
+    gender = RadioField("gender", choices=['male', 'female'])
+    submit = SubmitField('Update')
+
+    def validate_email(self, email):
+        user = User.query.filter_by(email=email.data).first()
+        if user:
+            raise ValidationError("this email already exist!")
+
+    def validate_username(self, username):
+        user = User.query.filter_by(username=username.data).first()
+        if user:
+            raise ValidationError("this Username already exist!")
