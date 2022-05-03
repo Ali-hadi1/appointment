@@ -7,7 +7,7 @@ from appointment.view import create_doctor_info, delete_user, create_schedule, v
                              get_user_info, delete_an_appointment, current_user_profile
 from appointment.privilege import admin_required, doctor_or_admin_required
 from appointment.queries import get_all_confirmed_doctors, get_all_requested_doctors, get_all_doctors_has_schedule
-from appointment.models import User, DoctorInfo, Schedule
+from appointment.models import User, DoctorInfo
 from flask_login import logout_user, login_required
 
 

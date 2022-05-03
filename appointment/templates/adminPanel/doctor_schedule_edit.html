@@ -20,7 +20,7 @@
                             {% endfor %}
                         </div>
                         {% else %}
-                        {{ form.name(class="form-control form-control-lg input_style") }}
+                        {{ form.name(class="form-control form-control-lg input_style", value=schedule.name) }}
                         {% endif %}
                     </div>
                     <div class="form-group">
@@ -33,7 +33,7 @@
                             {% endfor %}
                         </div>
                         {% else %}
-                        {{ form.start_date(class="form-control form-control-lg input_style") }}
+                        {{ form.start_date(class="form-control form-control-lg input_style", value=schedule.start_date) }}
                         {% endif %}
                     </div>
                     <div class="form-group">
@@ -46,7 +46,20 @@
                             {% endfor %}
                         </div>
                         {% else %}
-                        {{ form.end_date(class="form-control form-control-lg input_style") }}
+                        {{ form.end_date(class="form-control form-control-lg input_style", value=schedule.end_date) }}
+                        {% endif %}
+                    </div>
+                    <div class="form-group">
+                        {{ form.description.label(class="form-control-label text-capitalize") }}
+                        {% if form.description.errors %}
+                        {{ form.description(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for errors in form.description.errors %}
+                            <span> {{ error }} </span>
+                            {% endfor %}
+                        </div>
+                        {% else %}
+                        {{ form.description(class="form-control form-control-lg input_style") }}
                         {% endif %}
                     </div>
                     <div class="float-right">

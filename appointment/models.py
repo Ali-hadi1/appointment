@@ -92,23 +92,27 @@ class Schedule(db.Model):
     doctor_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     start_date = db.Column(db.Date(), default = datetime.now().date())
     end_date = db.Column(db.Date(), default = datetime.now().date())
+    description = db.Column(db.Text())
     appointment = db.relationship('Appointment', backref='Schedule', lazy=True)
 
     def __repr__(self):
-        return f"Schedule('{self.id}', '{self.name}' '{self.doctor_id}', '{self.start_date}', '{self.end_date})"
+        return f"Schedule('{self.id}', '{self.name}' '{self.doctor_id}', '{self.start_date}', '{self.end_date}," \
+               f" '{self.description}')"
 
-    def __init__(self, name, doctor_id, start_date, end_date):
+    def __init__(self, name, doctor_id, start_date, end_date, description):
         self.name = name
         self.doctor_id = doctor_id
         self.start_date = start_date
         self.end_date = end_date
+        self.description = description
         db.session.add(self)
         db.session.commit()
 
-    def update_doctor_schedule(self, name, start_date, end_date):
+    def update_doctor_schedule(self, name, start_date, end_date, description):
         self.name = name
         self.start_date = start_date
         self.end_date = end_date
+        self.description = description
         db.session.commit()
         return self
 

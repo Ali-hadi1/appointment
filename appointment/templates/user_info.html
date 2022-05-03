@@ -16,13 +16,13 @@
             <br>
             <ul class="list-group">
                 <li class="list-group-item text-muted">Info</li>
-                <li class="list-group-item d-flex justify-content-between">Name: <span>{{current_user.name}}</span></li>
+                <li class="list-group-item d-flex justify-content-between">Name: <span>{{user.name}}</span></li>
                 <li class="list-group-item d-flex justify-content-between">Lastname:
-                    <span>{{current_user.lastname}}</span>
+                    <span>{{user.lastname}}</span>
                 </li>
                 <li class="list-group-item d-flex flex-wrap justify-content-between">Email: <a
-                        href="{{ current_user.email }}"> {{current_user.email}}</a> </li>
-                <li class="list-group-item d-flex justify-content-between">Phone: <span> {{ current_user.phone }}</span>
+                        href="{{ user.email }}"> {{user.email}}</a> </li>
+                <li class="list-group-item d-flex justify-content-between">Phone: <span> {{ user.phone }}</span>
                 </li>
             </ul>
         </div>

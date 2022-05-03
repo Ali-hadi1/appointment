@@ -30,7 +30,7 @@ def delete_user(id):
 def create_schedule():
     form = CreateSchedule()
     if form.validate_on_submit():
-        Schedule(form.name.data, current_user.id, form.start_date.data, form.end_date.data)
+        Schedule(form.name.data, current_user.id, form.start_date.data, form.end_date.data, form.description.data)
         return render_template('schedule.html', form=form, schedules=current_user.schedule)
     return render_template("schedule.html", form=form, schedules=current_user.schedule)
 
@@ -62,7 +62,7 @@ def admin_create_doctor_schedule(id):
     doctor = User.query.filter_by(id=id).first()
     form = CreateSchedule()
     if form.validate_on_submit():
-        Schedule(form.name.data, doctor.id, form.start_date.data, form.end_date.data)
+        Schedule(form.name.data, doctor.id, form.start_date.data, form.end_date.data, form.description.data)
         return redirect(url_for('get_and_create_doctor_schedule', id=doctor.id))
     return render_template("adminPanel/doctor_schedule_list.html", schedules=doctor.schedule, form=form)
 
@@ -80,17 +80,17 @@ def edit_doctor_schedule(id):
     form = CreateSchedule()
     doctor_schedule = Schedule.query.filter_by(id=id).first()
     if form.validate_on_submit():
-        doctor_schedule.update_doctor_schedule(form.name.data, form.start_date.data, form.end_date.data)
+        doctor_schedule.update_doctor_schedule(form.name.data, form.start_date.data, form.end_date.data,
+                                               form.description.data)
         flash("Schedule successfully edited", 'info')
         if request.url == base_url + '/admin/doctors/schedules/edit/' + str(id):
             return redirect(url_for('get_and_create_doctor_schedule', id=doctor_schedule.doctor_id))
         return redirect(url_for('schedule'))
-    form.name.data = doctor_schedule.name
-    form.start_date.data = doctor_schedule.start_date
-    form.end_date.data = doctor_schedule.end_date
+    form.description.data = doctor_schedule.description
     if request.url == base_url + '/admin/doctors/schedules/edit/' + str(id):
-        return render_template('adminPanel/doctor_schedule_edit.html', form=form, id=doctor_schedule.doctor_id)
-    return render_template('edit_schedule.html', form=form, id=doctor_schedule.doctor_id)
+        return render_template('adminPanel/doctor_schedule_edit.html', form=form, id=doctor_schedule.doctor_id,
+                               schedule=doctor_schedule)
+    return render_template('edit_schedule.html', form=form, id=doctor_schedule.doctor_id, schedule=doctor_schedule)
 
 
 def appointed_patient_on_a_schedule(id):
