@@ -7,15 +7,20 @@
     {% for schedule in schedules %}
     <div class="col-md-6 offset-md-3 mb-3">
         <div class="card">
-            <div class="card-header">
-                <h5 class="modal-title text-capitalize">Available dates for appointing</h5>
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="modal-title text-capitalize font-weight-bold">{{ schedule.name }}</h5>
+                <div class="">
+                    <span>Available upto</span>
+                    <small class="text-info">
+                        {{ schedule.end_date }}
+                    </small>
+                </div>
             </div>
             <div class="card-body">
                 <div class="modal-body p-0">
-                    <span class="">Start Date:{{ schedule.start_date }}</span>
+                    <span class="d-flex justify-content-center">{{ schedule.description }}</span>
                     <br>
-                    <span class="">End Date{{ schedule.end_date }}</span>
-                    <br>
+                    <hr class="mb-2">
                     <div class="col-12 p-0 d-flex justify-content-between">
                         {% if current_user.id == schedule.doctor_id %}
                             <a class="btn btn-outline-info" href="{{url_for('appointed_patient', id=schedule.id)}}">appointed patient </a>

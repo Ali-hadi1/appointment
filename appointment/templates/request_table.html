@@ -52,11 +52,15 @@
                                         {% endif %}
                                     </td>
                                     <td class="text-center">
-                                        <a href="{{ url_for('requests', id=doctor.id ) }}" class="text-info">
+                                        <a href="{{ url_for('user_info', id=doctor.id ) }}" class="text-info">
                                             <i class="bi bi-person-circle"></i>
                                         </a>
                                         <a href="{{ url_for('confirm', id = doctor.id)}}" class="text-success">
                                             <i class="bi bi-check-circle-fill"></i>
+                                        </a>
+                                        <a href="{{ url_for('delete', id=doctor.id) }}" class="text-danger"
+                                            onclick="alertMessage()">
+                                            <i class="bi bi-x-square"></i>
                                         </a>
                                     </td>
                                 </tr>

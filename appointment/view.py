@@ -19,10 +19,10 @@ def create_doctor_info(id):
 
 
 def delete_user(id):
+    user = User.query.filter_by(id=id).first()
     if current_user.id == id:
         flash("Ooops, unable to delete your self!", "warning")
         redirect(url_for("users"))
-    user = User.query.filter_by(id=id).first()
     user.delete_user()
     return redirect(url_for('users'))
 
