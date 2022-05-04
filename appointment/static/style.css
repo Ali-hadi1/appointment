@@ -4,6 +4,19 @@
     border-color: #a370f7;
     color: black;
 }
+#main {
+    background-image: url("./images/mildred-doctor-appointment-wait-times-ftr.jpg");
+    height: 650px;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+.section{
+    font-size: 2.5rem;
+    font-weight: bold;
+    padding: 10px;
+    background-color: #499ae5;
+    color: white;
+}
 .none-border{
     border:none;
 }
