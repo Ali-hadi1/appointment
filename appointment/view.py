@@ -131,3 +131,8 @@ def current_user_profile():
         return render_template("adminPanel/admin_profile.html", form=form)
     return render_template('profile.html', form=form)
 
+
+def get_users_with_pagenation():
+    page = request.args.get('page', 1, type=int)
+    users = User.query.paginate(page=page, per_page=7)
+    return render_template("/usersList.html", users=users)

@@ -1,10 +1,10 @@
-from flask import render_template, url_for, redirect
+from flask import render_template, url_for, redirect, request
 from appointment import app, db
 from appointment.auth import create_account, user_login
 from appointment.view import create_doctor_info, delete_user, create_schedule, view_doctor_schedule,\
                              patient_create_appointment, admin_create_doctor_schedule, delete_doctor_schedule,\
                              edit_doctor_schedule, appointed_patient_on_a_schedule, all_appointed_patient_list,\
-                             get_user_info, delete_an_appointment, current_user_profile
+                             get_user_info, delete_an_appointment, current_user_profile, get_users_with_pagenation
 from appointment.privilege import admin_required, doctor_or_admin_required
 from appointment.queries import get_all_confirmed_doctors, get_all_requested_doctors, get_all_doctors_has_schedule
 from appointment.models import User, DoctorInfo
@@ -60,12 +60,11 @@ def requests():
     return render_template('request_table.html', doctors=get_all_requested_doctors())
 
 
-@app.route("/users")
+@app.route("/admin/users/list")
 @login_required
 @admin_required
 def users():
-    users = User.query.all()
-    return render_template("/usersList.html", users=users)
+    return get_users_with_pagenation()
 
 
 @app.route("/delete/<int:id>")
