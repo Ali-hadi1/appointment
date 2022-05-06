@@ -42,7 +42,7 @@ class User(db.Model, UserMixin):
         db.session.add(self)
         db.session.commit()
 
-    def update_user(self, name, lastname, username, email, address, phone, dob, gender):
+    def update_user(self, name, lastname, username, email, address, phone, dob, gender, role):
         self.name = name
         self.lastname = lastname
         self.username = username
@@ -51,6 +51,7 @@ class User(db.Model, UserMixin):
         self.phone = phone
         self.date_of_birth = dob
         self.gender = gender
+        self.role = role
         db.session.commit()
         return self
 

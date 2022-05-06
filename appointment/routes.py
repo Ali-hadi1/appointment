@@ -158,7 +158,7 @@ def appointed_patient_list():
     return all_appointed_patient_list()
 
 
-@app.route("/admin/user/info/<int:id>", methods=['GET'])
+@app.route("/admin/user/info/<int:id>", methods=['GET', 'POST'])
 @login_required
 @admin_required
 def user_info(id):

@@ -107,9 +107,13 @@ def all_appointed_patient_list():
 
 
 def get_user_info(id):
-    form = EditUserInfo()
     user_info = User.query.filter_by(id=id).first()
-    return render_template('user_info.html', user=user_info, form=form)
+    if request.method == "POST":
+        user_info.update_user(request.form.get('name'), request.form.get('lastname'), request.form.get('username'),
+                              request.form.get('email'), request.form.get('address'), request.form.get('phone'),
+                              user_info.date_of_birth, user_info.gender, request.form.get('role'))
+        return redirect(url_for("users"))
+    return render_template('user_info.html', user=user_info)
 
 
 def delete_an_appointment(id):
@@ -122,7 +126,8 @@ def current_user_profile():
     form = UpdateAccount()
     if form.validate_on_submit():
         current_user.update_user(form.name.data, form.lastname.data, form.username.data, form.email.data,
-                                 form.address.data, form.phone.data, form.date_of_birth.data, current_user.gender)
+                                 form.address.data, form.phone.data, form.date_of_birth.data, current_user.gender,
+                                 current_user.role)
         flash('Your account Updated Successfully', 'success')
         if request.url == base_url + "/admin/profile":
             return redirect(url_for('admin_profile'))
