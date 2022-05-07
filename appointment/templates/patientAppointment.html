@@ -14,7 +14,7 @@
                     {{ form.reason(class="form-control form-control-lg is-invalid") }}
                     <div class="invalid-feedback">
                         {% for errors in form.reason.errors %}
-                            <span> {{ error }} </span>
+                            <span> {{ errors }} </span>
                         {% endfor %}
                     </div>
                 {% else %}
@@ -27,7 +27,7 @@
                     {{ form.date(class="form-control form-control-lg is-invalid") }}
                     <div class="invalid-feedback">
                         {% for errors in form.date.errors %}
-                            <span> {{ error }} </span>
+                            <span> {{ errors }} </span>
                         {% endfor %}
                     </div>
                 {% else %}

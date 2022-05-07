@@ -14,7 +14,7 @@
                             {{ form.degree(class="form-control form-control-lg is-invalid") }}
                             <div class="invalid-feedback">
                                 {% for errors in form.degree.errors %}
-                                    <span> {{ error }} </span>
+                                    <span> {{ errors }} </span>
                                 {% endfor %}
                             </div>
                         {% else %}
@@ -32,7 +32,7 @@
                             {{ form.specialty(class="form-control form-control-lg is-invalid") }}
                             <div class="invalid-feedback">
                                 {% for errors in form.specialty.errors %}
-                                    <span> {{ error }} </span>
+                                    <span> {{ errors }} </span>
                                 {% endfor %}
                             </div>
                         {% else %}

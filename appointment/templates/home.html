@@ -17,18 +17,18 @@
         {% for doctor in doctors %}
         <div class="col-md-6 offset-md-3 mb-3">
             <div class="card">
-                <div class="card-header">
+                <div class="card-header d-flex justify-content-start align-items-center">
                     <h5 class="modal-title text-capitalize">{{ doctor.name}}</h5>
+                    <span class="pl-2 pt-1 text-info text-capitalize">({{ doctor.lastname }})</span>
                 </div>
                 <div class="card-body">
                     <div class="modal-body p-0">
-                        <span class="">{{ doctor.lastname }}</span>
+                        
+                        <span class="text-capitalize">Doctor Degree: <span class="pl-3">{{ doctor.degree }}</span></span>
                         <br>
-                        <span class="">{{ doctor.degree }}</span>
+                        <span class="text-capitalize">Doctor specialty: <span class="pl-3">{{ doctor.specialty }}</span></span>
                         <br>
-                        <span class="">{{ doctor.specialty }}</span>
-                        <br>
-                        <span class=""> <a href="{{ doctor.email }}">{{doctor.email}}</a></span>
+                        <span class=""><span class="pr-3"><i class="bi bi-envelope-fill text-warning title pr-1"></i>Email:</span> <a href="{{ doctor.email }}">{{doctor.email}}</a></span>
                         <div class="col-12 p-0 d-flex justify-content-end">
                             <a class="btn btn-outline-info" href="{{url_for('viewSchedule', id = doctor.id)}}"> view Schedules </a>
                         </div>

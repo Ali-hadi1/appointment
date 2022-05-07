@@ -15,7 +15,7 @@
                                 {{ form.name(class="form-control form-control-lg is-invalid") }}
                                 <div class="invalid-feedback">
                                     {% for errors in form.name.errors %}
-                                        <span> {{ error }} </span>
+                                        <span> {{ errors }} </span>
                                     {% endfor %}
                                 </div>
                             {% else %}
@@ -31,7 +31,7 @@
                                 {{ form.lastname(class="form-control form-control-lg is-invalid") }}
                                 <div class="invalid-feedback">
                                     {% for errors in form.lastname.errors %}
-                                        <span> {{ error }} </span>
+                                        <span> {{ errors }} </span>
                                     {% endfor %}
                                 </div>
                             {% else %}
@@ -49,7 +49,7 @@
                                 {{ form.email(class="form-control form-control-lg is-invalid") }}
                                 <div class="invalid-feedback">
                                     {% for errors in form.email.errors %}
-                                        <span> {{ error }} </span>
+                                        <span> {{ errors }} </span>
                                     {% endfor %}
                                 </div>
                             {% else %}
@@ -64,7 +64,7 @@
                                 {{ form.username(class="form-control form-control-lg is-invalid") }}
                                 <div class="invalid-feedback">
                                     {% for errors in form.username.errors %}
-                                        <span> {{ error }} </span>
+                                        <span> {{ errors }} </span>
                                     {% endfor %}
                                 </div>
                             {% else %}
@@ -81,7 +81,7 @@
                                 {{ form.phone(class="form-control form-control-lg is-invalid") }}
                                 <div class="invalid-feedback">
                                     {% for errors in form.phone.errors %}
-                                        <span> {{ error }} </span>
+                                        <span> {{ errors }} </span>
                                     {% endfor %}
                                 </div>
                             {% else %}
@@ -96,7 +96,7 @@
                                 {{ form.date_of_birth(class="form-control form-control-lg is-invalid") }}
                                 <div class="invalid-feedback">
                                     {% for errors in form.date_of_birth.errors %}
-                                        <span> {{ error }} </span>
+                                        <span> {{ errors }} </span>
                                     {% endfor %}
                                 </div>
                             {% else %}
@@ -113,7 +113,7 @@
                                 {{ form.role(class="form-control form-control-lg is-invalid") }}
                                 <div class="invalid-feedback">
                                     {% for errors in form.role.errors %}
-                                        <span> {{ error }} </span>
+                                        <span> {{ errors }} </span>
                                     {% endfor %}
                                 </div>
                             {% else %}
@@ -128,7 +128,7 @@
                                 {{ form.address(class="form-control form-control-lg is-invalid") }}
                                 <div class="invalid-feedback">
                                     {% for errors in form.address.errors %}
-                                        <span> {{ error }} </span>
+                                        <span> {{ errors }} </span>
                                     {% endfor %}
                                 </div>
                             {% else %}
@@ -145,7 +145,7 @@
                                 {{ form.gender(class="form-control form-control-lg is-invalid") }}
                                 <div class="invalid-feedback">
                                     {% for errors in form.gender.errors %}
-                                        <span> {{ error }} </span>
+                                        <span> {{ errors }} </span>
                                     {% endfor %}
                                 </div>
                             {% else %}
@@ -162,7 +162,7 @@
                                 {{ form.password(class="form-control form-control-lg is-invalid") }}
                                 <div class="invalid-feedback">
                                     {% for errors in form.password.errors %}
-                                        <span> {{ error }} </span>
+                                        <span> {{ errors }} </span>
                                     {% endfor %}
                                 </div>
                             {% else %}
@@ -177,7 +177,7 @@
                                 {{ form.confirm_password(class="form-control form-control-lg is-invalid") }}
                                 <div class="invalid-feedback">
                                     {% for errors in form.confirm_password.errors %}
-                                        <span> {{ error }} </span>
+                                        <span> {{ errors }} </span>
                                     {% endfor %}
                                 </div>
                             {% else %}
