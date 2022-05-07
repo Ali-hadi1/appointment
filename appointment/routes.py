@@ -4,7 +4,9 @@ from appointment.auth import create_account, user_login
 from appointment.view import create_doctor_info, delete_user, create_schedule, view_doctor_schedule,\
                              patient_create_appointment, admin_create_doctor_schedule, delete_doctor_schedule,\
                              edit_doctor_schedule, appointed_patient_on_a_schedule, all_appointed_patient_list,\
-                             get_user_info, delete_an_appointment, current_user_profile, get_users_with_pagenation
+                             get_user_info, delete_an_appointment, current_user_profile, get_users_with_pagenation,\
+                             update_user_password
+                                 
 from appointment.privilege import admin_required, doctor_or_admin_required
 from appointment.queries import get_all_confirmed_doctors, get_all_requested_doctors, get_all_doctors_has_schedule
 from appointment.models import User, DoctorInfo
@@ -178,3 +180,8 @@ def delete_appointment(id):
 def admin_profile():
     return current_user_profile()
 
+
+@app.route("/change/password", methods=['GET', 'POST'])
+@login_required
+def update_password():
+    return update_user_password()

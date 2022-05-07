@@ -1,6 +1,7 @@
+from appointment import bcrypt
 from flask import render_template, redirect, url_for, request, flash
 from appointment import db
-from appointment.forms import DoctorInfoForm, CreateSchedule, MakeAppointment, UpdateAccount, EditUserInfo
+from appointment.forms import DoctorInfoForm, CreateSchedule, MakeAppointment, UpdateAccount, ChangePassword
 from appointment.models import DoctorInfo, User, Schedule, Appointment
 from flask_login import current_user
 from sqlalchemy import and_
@@ -142,3 +143,16 @@ def get_users_with_pagenation():
     page = request.args.get('page', 1, type=int)
     users = User.query.paginate(page=page, per_page=7)
     return render_template("/usersList.html", users=users)
+
+
+def update_user_password():
+    form = ChangePassword()
+    if form.validate_on_submit():
+        if bcrypt.check_password_hash(current_user.password , form.previous_password.data):
+            new_password = bcrypt.generate_password_hash(form.new_password.data).decode('utf-8')
+            current_user.password = new_password
+            db.session.commit()
+            flash('Your password changed Successfully!', 'info')
+            return redirect(url_for('profile'))
+        flash("Your old password isn't correct!", 'warning')
+    return render_template('/update_password.html', form=form)

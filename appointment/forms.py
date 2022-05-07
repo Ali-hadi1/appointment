@@ -104,3 +104,9 @@ class EditUserInfo(FlaskForm):
         user = User.query.filter_by(username=username.data).first()
         if user:
             raise ValidationError("this Username already exist!")
+
+
+class ChangePassword(FlaskForm):
+    previous_password = PasswordField('previous password', validators=[DataRequired()])
+    new_password = PasswordField('new password', validators=[DataRequired()])
+    submit = SubmitField('update password')
