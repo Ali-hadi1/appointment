@@ -53,7 +53,8 @@ class UpdateAccount(FlaskForm):
                 raise ValidationError("this Username already exist!")
 
 class Login(FlaskForm):
-    email = StringField('email', validators=[DataRequired(), Email()])
+    # email = StringField('email', validators=[DataRequired(), Email()])
+    username = StringField('username', validators=[DataRequired(), Length(min=4)])
     password = PasswordField('password', validators=[DataRequired()])
     remember = BooleanField('Remember Me')
     submit = SubmitField('Login')

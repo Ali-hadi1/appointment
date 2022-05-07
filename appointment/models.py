@@ -26,7 +26,7 @@ class User(db.Model, UserMixin):
 
     def __repr__(self):
         return f"User('{self.id}', '{self.name}', '{self.email}', '{self.lastname}', '{self.address}', '{self.phone}',"\
-               f"'{self.date_of_birth}', '{self.gender}', '{self.role}')"
+               f"'{self.date_of_birth}', '{self.gender}', '{self.role}', '{self.username}')"
 
     def __init__(self, name, lastname, username, email, address, phone, dob, role, gender, password):
         self.name = name

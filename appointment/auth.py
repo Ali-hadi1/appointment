@@ -24,7 +24,8 @@ def user_login():
         return redirect(url_for('home'))
     form = Login()
     if form.validate_on_submit():
-        user = User.query.filter_by(email=form.email.data).first()
+        # user = User.query.filter_by(email=form.email.data).first()
+        user = User.query.filter_by(username = form.username.data).first()
         if user and user.role == 2:
             doctor_info = user.doctorinfo
             if doctor_info[0].valid == False:

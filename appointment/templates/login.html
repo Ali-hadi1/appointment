@@ -10,16 +10,16 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="form-group">
-                        {{ form.email.label(class="form-control-label text-capitalize") }}
-                        {% if form.email.errors %}
-                            {{ form.email(class="form-control form-control-lg is-invalid") }}
+                        {{ form.username.label(class="form-control-label text-capitalize") }}
+                        {% if form.username.errors %}
+                            {{ form.username(class="form-control form-control-lg is-invalid") }}
                             <div class="invalid-feedback">
-                                {% for errors in form.email.errors %}
+                                {% for errors in form.username.errors %}
                                     <span> {{ errors }} </span>
                                 {% endfor %}
                             </div>
                         {% else %}
-                            {{ form.email(class="form-control form-control-lg input_style", placeholder="Enter your Email") }}
+                            {{ form.username(class="form-control form-control-lg input_style", placeholder="Enter your Username") }}
                         {% endif %}
                     </div>
                 </div>

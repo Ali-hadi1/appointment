@@ -112,6 +112,7 @@ def get_user_info(id):
         user_info.update_user(request.form.get('name'), request.form.get('lastname'), request.form.get('username'),
                               request.form.get('email'), request.form.get('address'), request.form.get('phone'),
                               user_info.date_of_birth, user_info.gender, request.form.get('role'))
+        flash("The Account updated successfully!", 'info')
         return redirect(url_for("users"))
     return render_template('user_info.html', user=user_info)
 
