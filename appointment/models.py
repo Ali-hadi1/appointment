@@ -153,30 +153,3 @@ class Appointment(db.Model):
         db.session.delete(self)
         db.session.commit()
         return True
-
-
-class Cash(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(30), nullable=False, unique=True)
-    name = db.Column(db.String(30), nullable=False)
-    lastname = db.Column(db.String(30), nullable=False)
-    email = db.Column(db.String(40), unique=True, nullable=False)
-    address = db.Column(db.Text , nullable=False)
-    phone = db.Column(db.String(20), unique=True, nullable=False)
-    date_of_birth = db.Column(db.Date(), default = datetime.now().date())
-    role = db.Column(db.Integer, nullable=False, default=3)
-    gender = db.Column(db.Boolean, default=True, nullable=False)
-    password = db.Column(db.String(60), nullable=False)
-
-    def __repr__(self):
-        return f"User('{self.id}', '{self.name}', '{self.email}', '{self.lastname}'," \
-               f"'{self.address}', '{self.phone}', '{self.date_of_birth}', '{self.gender}', '{self.role}')"
-
-# class User(db.Model):
-#     id = db.Column(db.Integer, primary_key=True)
-#     name = db.Column(db.String(30), nullable=False)
-#     lastname = db.Column(db.String(30), nullable=False)
-#     email = db.Column(db.String(40), unique=True, nullable=False)
-#
-#     def __repr__(self):
-#         return f"User('{self.name}', '{self.lastname}', '{self.email}')"

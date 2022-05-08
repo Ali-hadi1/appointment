@@ -2,6 +2,8 @@ from flask import Flask
 from flask_bcrypt import Bcrypt
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
+import os
+from datetime import datetime
 
 app = Flask(__name__)
 
@@ -16,6 +18,11 @@ login_manager.login_view = 'login'
 login_manager.login_message_category = 'info'
 
 
-
 from appointment import routes
+from appointment.models import User
+
+base_dir = os.path.join(os.path.abspath(os.curdir), 'appointment')
+files_in_base_dir = os.listdir(base_dir)
+if 'site.db' not in files_in_base_dir:
+    db.create_all()
 
