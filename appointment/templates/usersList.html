@@ -53,19 +53,21 @@
                                         {% endif %}
                                     </td>
                                     <td class="text-center" style="width: 150px;">
-                                        {% if user.gender == True %}
+                                        {% if user.gender == 1 %}
                                             Male
                                         {% else %}
                                             Female
                                         {% endif %}
                                     </td>
                                     <td class="text-center">
-                                        <a href="{{ url_for('user_info', id=user.id)}}" class="text-info">
-                                            <i class="bi bi-person-circle"></i>
-                                        </a>
-                                        <a href="{{ url_for('delete', id = user.id)}}" class="text-danger">
-                                            <i class="bi bi-trash-fill"></i>
-                                        </a>
+                                        {% if not current_user.id == user.id %}
+                                            <a href="{{ url_for('user_info', id=user.id)}}" class="text-info">
+                                                <i class="bi bi-person-circle"></i>
+                                            </a>
+                                            <a href="{{ url_for('delete', id = user.id)}}" class="text-danger">
+                                                <i class="bi bi-trash-fill"></i>
+                                            </a>
+                                        {% endif %}
                                     </td>
                                 </tr>
                             {% endfor %}

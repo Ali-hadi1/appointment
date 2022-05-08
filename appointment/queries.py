@@ -14,5 +14,5 @@ def get_all_requested_doctors():
 
 
 def get_all_doctors_has_schedule():
-    return db.session.query(User).join(Schedule, Schedule.doctor_id == User.id).group_by(User.id).all()
-
+    # return db.session.query(User).join(Schedule, Schedule.doctor_id == User.id).group_by(User.id).all()
+    return db.session.query(User).join(DoctorInfo, DoctorInfo.user_id==User.id).filter(DoctorInfo.valid == True).all()

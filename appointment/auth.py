@@ -28,7 +28,7 @@ def user_login():
         user = User.query.filter_by(username = form.username.data).first()
         if user and user.role == 2:
             doctor_info = user.doctorinfo
-            if doctor_info[0].valid == False:
+            if doctor_info.valid == False:
                 flash('Dear Doctor your Account is not activate yet!', 'info')
                 return redirect(url_for('home'))
         if user and bcrypt.check_password_hash(user.password, form.password.data):

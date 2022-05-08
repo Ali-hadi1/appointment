@@ -28,6 +28,10 @@ class UserRegisteration(FlaskForm):
         user = User.query.filter_by(username=username.data).first()
         if user:
             raise ValidationError("this Username already exist!")
+    def validate_phone(self, phone):
+        user = User.query.filter_by(phone=phone.data).first()
+        if user:
+            raise ValidationError("this Phone number already exist!")
 
 
 class UpdateAccount(FlaskForm):

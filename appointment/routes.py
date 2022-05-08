@@ -7,7 +7,7 @@ from appointment.view import create_doctor_info, delete_user, create_schedule, v
                              get_user_info, delete_an_appointment, current_user_profile, get_users_with_pagenation,\
                              update_user_password
                                  
-from appointment.privilege import admin_required, doctor_or_admin_required
+from appointment.privilege import admin_required, doctor_required
 from appointment.queries import get_all_confirmed_doctors, get_all_requested_doctors, get_all_doctors_has_schedule
 from appointment.models import User, DoctorInfo
 from flask_login import logout_user, login_required
@@ -88,7 +88,7 @@ def confirm(id):
 
 @app.route("/schedule", methods=('GET', 'POST'))
 @login_required
-@doctor_or_admin_required
+@doctor_required
 def schedule():
     return create_schedule()
 
@@ -127,7 +127,7 @@ def get_and_create_doctor_schedule(id):
 
 @app.route("/admin/doctors/schedules/delete/<int:id>")
 @login_required
-@doctor_or_admin_required
+@doctor_required
 def DeleteDoctorSchedule(id):
     return delete_doctor_schedule(id)
 
@@ -141,14 +141,14 @@ def admin_edit_doctor_schedule(id):
 
 @app.route("/doctors/schedules/edit/<int:id>", methods=['GET', 'POST'])
 @login_required
-@doctor_or_admin_required
+@doctor_required
 def doctor_edit_schedule(id):
     return edit_doctor_schedule(id)
 
 
 @app.route("/appointed/patient/<int:id>", methods=['GET'])
 @login_required
-@doctor_or_admin_required
+@doctor_required
 def appointed_patient(id):
     return appointed_patient_on_a_schedule(id)
 

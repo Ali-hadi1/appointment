@@ -20,7 +20,7 @@ class User(db.Model, UserMixin):
     role = db.Column(db.Integer, nullable=False, default=3)
     gender = db.Column(db.Boolean, default=True, nullable=False)
     password = db.Column(db.String(60), nullable=False)
-    doctorinfo = db.relationship('DoctorInfo', backref='User', cascade="all, delete", passive_deletes=True, lazy=True)
+    doctorinfo = db.relationship('DoctorInfo', backref='User', cascade="all, delete", uselist=False, lazy=True)
     schedule = db.relationship('Schedule', backref='User', lazy=True)
     appointment = db.relationship('Appointment', backref='User', lazy=True)
 

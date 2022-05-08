@@ -31,8 +31,15 @@ def delete_user(id):
 def create_schedule():
     form = CreateSchedule()
     if form.validate_on_submit():
-        Schedule(form.name.data, current_user.id, form.start_date.data, form.end_date.data, form.description.data)
-        return render_template('schedule.html', form=form, schedules=current_user.schedule)
+        if form.start_date.data.year <= form.end_date.data.year and form.start_date.data.month <= form.end_date.data.month:
+            if form.start_date.data.month == form.end_date.data.month and form.start_date.data.day < form.end_date.data.day:
+                Schedule(form.name.data, current_user.id, form.start_date.data, form.end_date.data, form.description.data)
+                return render_template('schedule.html', form=form, schedules=current_user.schedule)
+            elif form.start_date.data.month < form.end_date.data.month:
+                Schedule(form.name.data, current_user.id, form.start_date.data, form.end_date.data, form.description.data)
+                return render_template('schedule.html', form=form, schedules=current_user.schedule)
+        flash("Please choose proper date", 'info')
+        return render_template("schedule.html", form=form, schedules=current_user.schedule)
     return render_template("schedule.html", form=form, schedules=current_user.schedule)
 
 
@@ -153,10 +160,10 @@ def update_user_password():
             current_user.password = new_password
             db.session.commit()
             flash('Your password changed Successfully!', 'info')
-            if base_url + "/admin/change/password":
+            if request.url == base_url + "/admin/change/password":
                 return redirect(url_for('admin_profile'))
             return redirect(url_for('profile'))
         flash("Your old password isn't correct!", 'warning')
-    if base_url + "/admin/change/password":
+    if request.url == base_url + "/admin/change/password":
         return render_template("/adminPanel/admin_update_password.html", form=form)
     return render_template('/update_password.html', form=form)
