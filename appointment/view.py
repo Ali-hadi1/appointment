@@ -153,6 +153,10 @@ def update_user_password():
             current_user.password = new_password
             db.session.commit()
             flash('Your password changed Successfully!', 'info')
+            if base_url + "/admin/change/password":
+                return redirect(url_for('admin_profile'))
             return redirect(url_for('profile'))
         flash("Your old password isn't correct!", 'warning')
+    if base_url + "/admin/change/password":
+        return render_template("/adminPanel/admin_update_password.html", form=form)
     return render_template('/update_password.html', form=form)

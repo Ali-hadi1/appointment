@@ -185,3 +185,10 @@ def admin_profile():
 @login_required
 def update_password():
     return update_user_password()
+
+
+@app.route("/admin/change/password", methods=['GET', 'POST'])
+@login_required
+@admin_required
+def admin_update_password():
+    return update_user_password()
