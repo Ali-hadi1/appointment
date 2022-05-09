@@ -1,0 +1,56 @@
+{% extends "layout/layout.html" %}
+
+{% block content %}
+{% include 'layout/home_header.html' %}
+
+<div class="mt-8">
+    <div class="row col-12">
+        <div class="col-lg-8 offset-lg-2">
+            <div class="main-card mb-3 card">
+                <div class="card-header">My Appointment List </div>
+                <div class="table-responsive">
+                    <table class="align-middle mb-0 table table-borderless table-striped table-hover">
+                        <thead>
+                            <tr class="app-normal-font">
+                                <th class="text-center">Doctor Name</th>
+                                <th class="text-center">Doctor Lastname</th>
+                                <th class="text-center">Doctor Email</th>
+                                <th class="text-center">Schedule Title</th>
+                                <th class="text-center">Appointment Date</th>
+                                <!-- <th class="text-center">Actions</th> -->
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% if appointments %}
+                                {% for appointment in appointments %}
+                                    <tr class="app-normal-font p-0 text-center">
+                                        <td class="text-center">{{ appointment.firstname }}</td>
+                                        <td class="text-center">{{appointment.lastname}}</td>
+                                        <td class="text-center">
+                                            <div class="widget-content p-0">
+                                                {{appointment.email}}
+                                            </div>
+                                        </td>
+                                        <td class="text-center">{{appointment.name}}</td>
+                                        <td class="text-center td_description_max_width">{{appointment.appointment_date}}</td>
+                                        <!-- <td class="text-center p-1">
+                                            <a href="" class="btn btn-danger">
+                                                <small class="app-normal-font">Cancel</small>
+                                            </a>
+                                        </td> -->
+                                    </tr>
+                                {% endfor %}
+                            {% else %}
+                                <div class="d-flex justify-content-center app-normal-font p-0 text-danger">
+                                    <span class="">You don't have any Appointment</span>
+                                </div>
+                            {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

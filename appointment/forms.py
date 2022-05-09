@@ -25,6 +25,8 @@ class UserRegisteration(FlaskForm):
             raise ValidationError("this email already exist!")
 
     def validate_username(self, username):
+        if " " in username.data:
+            raise ValidationError("The Username should not have space!")
         user = User.query.filter_by(username=username.data).first()
         if user:
             raise ValidationError("this Username already exist!")

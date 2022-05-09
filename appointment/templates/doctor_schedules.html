@@ -1,0 +1,50 @@
+{% extends "layout/layout.html" %}
+
+{% block content %}
+{% include 'layout/home_header.html' %}
+
+<div class="mt-8">
+    <div class="row">
+        <div class="col-lg-8 offset-lg-2">
+            <div class="main-card mb-3 card">
+                <div class="card-header">Schedules </div>
+                <div class="table-responsive">
+                    <table class="align-middle mb-0 table table-borderless table-striped table-hover">
+                        <thead>
+                            <tr class="app-normal-font">
+                                <th class="text-center">Id</th>
+                                <th class="text-center">Title</th>
+                                <th class="text-center">Start Date</th>
+                                <th class="text-center">End Date</th>
+                                <th class="text-center">Description</th>
+                                <th class="text-center">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for schedule in schedules %}
+                                <tr class="app-normal-font p-0">
+                                    <td class="text-center text-muted">{{ schedule.id }}</td>
+                                    <td class="text-center">{{schedule.name}}</td>
+                                    <td class="text-center">
+                                        <div class="widget-content p-0">
+                                            {{schedule.start_date}}
+                                        </div>
+                                    </td>
+                                    <td class="text-center">{{schedule.end_date}}</td>
+                                    <td class="text-center td_description_max_width">{{schedule.description}}</td>
+                                    <td class="text-center">
+                                        <a href="{{ url_for('appointed_patient', id=schedule.id)}}" class="btn btn-info">
+                                            appointed patients
+                                        </a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

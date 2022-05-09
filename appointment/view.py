@@ -45,6 +45,9 @@ def create_schedule():
 
 def view_doctor_schedule(id):
     doctor = User.query.filter_by(id=id).first()
+    if not doctor.schedule:
+        flash("This doctor doesn't have any schedule!", 'info')
+        return redirect(url_for('home'))
     return render_template("view_schedules.html", schedules=doctor.schedule)
 
 
@@ -79,7 +82,7 @@ def delete_doctor_schedule(id):
     schedule_delete = Schedule.query.filter_by(id=id).first()
     id = schedule_delete.doctor_id
     schedule_delete.delete_doctor_schedule()
-    if request.url == base_url+"/schedule":
+    if request.url == base_url+"/delete/schedule/"+ str(id):
         return redirect(url_for('schedule'))
     return redirect(url_for('get_and_create_doctor_schedule', id=id))
 
@@ -108,9 +111,10 @@ def appointed_patient_on_a_schedule(id):
 
 
 def all_appointed_patient_list():
+    page = request.args.get('page', 1, type=int)
     all_appointed_patient = db.session.query(User.name, User.lastname, User.phone, User.gender,
                          Appointment.reason, Appointment.id, Appointment.appointment_date)\
-                         .join(Appointment, User.id == Appointment.patient_id).all()
+                         .join(Appointment, User.id == Appointment.patient_id).paginate(page=page, per_page=7)
     return render_template('adminPanel/appointment_list.html', patients=all_appointed_patient)
 
 
@@ -167,3 +171,4 @@ def update_user_password():
     if request.url == base_url + "/admin/change/password":
         return render_template("/adminPanel/admin_update_password.html", form=form)
     return render_template('/update_password.html', form=form)
+

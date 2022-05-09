@@ -25,4 +25,5 @@ base_dir = os.path.join(os.path.abspath(os.curdir), 'appointment')
 files_in_base_dir = os.listdir(base_dir)
 if 'site.db' not in files_in_base_dir:
     db.create_all()
-
+    User('hadi', 'adekzada', 'hadi', 'admin@gmail.com', 'Kabul, Afghanistan', '0784747433', datetime(1999, 4, 3).date(),
+        1, True, bcrypt.generate_password_hash("hadi").decode('utf-8'))

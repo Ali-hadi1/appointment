@@ -8,7 +8,8 @@ from appointment.view import create_doctor_info, delete_user, create_schedule, v
                              update_user_password
                                  
 from appointment.privilege import admin_required, doctor_required
-from appointment.queries import get_all_confirmed_doctors, get_all_requested_doctors, get_all_doctors_has_schedule
+from appointment.queries import get_all_confirmed_doctors, get_all_requested_doctors, get_all_doctors,\
+                                get_doctor_schedule, get_user_appointment
 from appointment.models import User, DoctorInfo
 from flask_login import logout_user, login_required
 
@@ -100,7 +101,7 @@ def appointment():
     return render_template("appointment.html")
 
 
-@app.route("/doctor/schedule/<int:id>", methods=('GET', 'POST'))
+@app.route("/list/<int:id>", methods=('GET', 'POST'))
 def viewSchedule(id):
     return view_doctor_schedule(id)
 
@@ -115,7 +116,7 @@ def patientAppointment(id):
 @login_required
 @admin_required
 def doctorsSchedules():
-    return render_template("/doctors_schedules.html", doctors=get_all_doctors_has_schedule())
+    return render_template("/doctors_schedules.html", doctors=get_all_doctors())
 
 
 @app.route("/admin/doctors/schedules/details/<int:id>", methods=('GET', 'POST'))
@@ -127,8 +128,15 @@ def get_and_create_doctor_schedule(id):
 
 @app.route("/admin/doctors/schedules/delete/<int:id>")
 @login_required
-@doctor_required
+@admin_required
 def DeleteDoctorSchedule(id):
+    return delete_doctor_schedule(id)
+
+
+@app.route("/delete/schedule/<int:id>")
+@login_required
+@doctor_required
+def delete_schedule(id):
     return delete_doctor_schedule(id)
 
 
@@ -192,3 +200,17 @@ def update_password():
 @admin_required
 def admin_update_password():
     return update_user_password()
+
+
+@app.route('/doctor/schedule/list/<int:id>')
+@login_required
+@doctor_required
+def doctor_schedule(id):
+    return render_template("/doctor_schedules.html", schedules=get_doctor_schedule(id)) 
+
+
+@app.route('/user/appointment/list/<int:id>')
+@login_required
+def user_appointment_list(id):
+    return render_template("/patient_appointment_list.html", appointments= get_user_appointment(id)) 
+

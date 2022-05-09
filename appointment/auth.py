@@ -35,7 +35,7 @@ def user_login():
             login_user(user, remember=form.remember.data)
             if user.role == 1:
                 next_page = request.args.get('next')
-                return redirect(next_page) if next_page else redirect(url_for('dashboard'))
+                return redirect(next_page) if next_page else redirect(url_for('home'))
             next_page = request.args.get('next')
             return redirect(next_page) if next_page else redirect(url_for('home'))
         else:
