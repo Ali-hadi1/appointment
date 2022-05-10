@@ -3,6 +3,7 @@ from flask_login import current_user
 from wtforms import StringField, PasswordField, SubmitField, BooleanField, DateField, RadioField, SelectField, TextAreaField, HiddenField
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError
 from appointment.models import User
+from datetime import datetime
 
 
 class UserRegisteration(FlaskForm):
@@ -80,12 +81,20 @@ class CreateSchedule(FlaskForm):
     description = TextAreaField('description', validators=[DataRequired()])
     submit = SubmitField('submit')
 
+    def validate_end_date(self, end_date):
+        if end_date.data < self.start_date.data:
+            raise ValidationError("Please choose a proper date!")
+
 
 class MakeAppointment(FlaskForm):
     schedule_id= HiddenField('schedule_id')
     reason = TextAreaField('reason', validators=[DataRequired()])
     date = DateField('end_date', validators=[DataRequired()])
     submit = SubmitField('submit')
+
+    def validate_date(self, date):
+        if date.data < datetime.now().date():
+            raise ValidationError("This date is expired!", 'warning')
 
 
 class EditUserInfo(FlaskForm):

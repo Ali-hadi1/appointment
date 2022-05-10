@@ -31,13 +31,9 @@ def delete_user(id):
 def create_schedule():
     form = CreateSchedule()
     if form.validate_on_submit():
-        if form.start_date.data.year <= form.end_date.data.year and form.start_date.data.month <= form.end_date.data.month:
-            if form.start_date.data.month == form.end_date.data.month and form.start_date.data.day < form.end_date.data.day:
-                Schedule(form.name.data, current_user.id, form.start_date.data, form.end_date.data, form.description.data)
-                return render_template('schedule.html', form=form, schedules=current_user.schedule)
-            elif form.start_date.data.month < form.end_date.data.month:
-                Schedule(form.name.data, current_user.id, form.start_date.data, form.end_date.data, form.description.data)
-                return render_template('schedule.html', form=form, schedules=current_user.schedule)
+        if form.start_date.data <= form.end_date.data:
+            Schedule(form.name.data, current_user.id, form.start_date.data, form.end_date.data, form.description.data)
+            return render_template('schedule.html', form=form, schedules=current_user.schedule)
         flash("Please choose proper date", 'info')
         return render_template("schedule.html", form=form, schedules=current_user.schedule)
     return render_template("schedule.html", form=form, schedules=current_user.schedule)
@@ -55,7 +51,13 @@ def patient_create_appointment(id):
     form = MakeAppointment()
     form.schedule_id.data = id
     appointing_schedule = Schedule.query.filter_by(id=id).first()
+    if current_user.id == appointing_schedule.doctor_id:
+        flash("You can't make appointment in your schedules", 'warning')
+        return redirect(url_for('viewSchedule', id=appointing_schedule.doctor_id))
     if form.validate_on_submit():
+        if form.date.data > appointing_schedule.end_date:
+            flash("This date isn't in range of this schedule!", 'warning')
+            return redirect(url_for('patientAppointment', id=id))
         incoming_date_exist = db.session.query(Appointment)\
             .filter(and_(Appointment.schedule_id == id,
                          Appointment.appointment_date == form.date.data)).all()
@@ -63,8 +65,7 @@ def patient_create_appointment(id):
             flash("this date booked before Please choose a different one!", "info")
             return redirect(url_for('patientAppointment', id=id))
         Appointment(current_user.id, form.schedule_id.data, form.reason.data, form.date.data)
-        doctor_id = Schedule.query.filter_by(id=id).first()
-        return redirect(url_for('viewSchedule', id=doctor_id.doctor_id))
+        return redirect(url_for('viewSchedule', id=appointing_schedule.doctor_id))
     return render_template('patientAppointment.html', form=form, seleted_schedule=appointing_schedule,
                            today=datetime.now().date())
 
@@ -73,8 +74,11 @@ def admin_create_doctor_schedule(id):
     doctor = User.query.filter_by(id=id).first()
     form = CreateSchedule()
     if form.validate_on_submit():
-        Schedule(form.name.data, doctor.id, form.start_date.data, form.end_date.data, form.description.data)
-        return redirect(url_for('get_and_create_doctor_schedule', id=doctor.id))
+        if form.start_date.data <= form.end_date.data:
+            Schedule(form.name.data, doctor.id, form.start_date.data, form.end_date.data, form.description.data)
+            return redirect(url_for('get_and_create_doctor_schedule', id=doctor.id))
+        flash("Please choose proper date", 'info')
+        return render_template("adminPanel/doctor_schedule_list.html", schedules=doctor.schedule, form=form)
     return render_template("adminPanel/doctor_schedule_list.html", schedules=doctor.schedule, form=form)
 
 
@@ -82,7 +86,7 @@ def delete_doctor_schedule(id):
     schedule_delete = Schedule.query.filter_by(id=id).first()
     id = schedule_delete.doctor_id
     schedule_delete.delete_doctor_schedule()
-    if request.url == base_url+"/delete/schedule/"+ str(id):
+    if request.url == base_url+"/delete/schedule/"+str(schedule_delete.id):
         return redirect(url_for('schedule'))
     return redirect(url_for('get_and_create_doctor_schedule', id=id))
 
@@ -159,7 +163,7 @@ def get_users_with_pagenation():
 def update_user_password():
     form = ChangePassword()
     if form.validate_on_submit():
-        if bcrypt.check_password_hash(current_user.password , form.previous_password.data):
+        if bcrypt.check_password_hash(current_user.password, form.previous_password.data):
             new_password = bcrypt.generate_password_hash(form.new_password.data).decode('utf-8')
             current_user.password = new_password
             db.session.commit()
