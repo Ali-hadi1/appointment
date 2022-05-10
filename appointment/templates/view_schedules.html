@@ -26,9 +26,9 @@
                             <a class="btn btn-outline-info" href="{{url_for('appointed_patient', id=schedule.id)}}">appointed patient </a>
                         {% endif %}
                         {% if current_user.id == schedule.doctor_id %}
-                            <a class="btn btn-outline-info disable-a" href="{{url_for('patientAppointment', id=schedule.id)}}">appoint </a>
+                            <a class="btn btn-outline-info disable-a" href="{{url_for('patientAppointment', id=schedule.id)}}">Book </a>
                         {% else %}
-                            <a class="btn btn-outline-info" href="{{url_for('patientAppointment', id=schedule.id)}}">appoint </a>
+                            <a class="btn btn-outline-info" href="{{url_for('patientAppointment', id=schedule.id)}}">Book </a>
                         {% endif %}
                     </div>
                 </div>

@@ -129,7 +129,7 @@ class Appointment(db.Model):
     patient_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     schedule_id = db.Column(db.Integer, db.ForeignKey('Schedule.id'))
     reason = db.Column(db.String(200))
-    appointment_date = db.Column(db.Date(), default = datetime.now().date() )
+    appointment_date = db.Column(db.Date(), default = datetime.now().date())
 
     def __repr__(self):
         return f"Appointment('{self.id}', '{self.patient_id}', '{self.schedule_id}'," \

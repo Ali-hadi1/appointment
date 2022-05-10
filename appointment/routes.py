@@ -214,3 +214,8 @@ def doctor_schedule(id):
 def user_appointment_list(id):
     return render_template("/patient_appointment_list.html", appointments= get_user_appointment(id)) 
 
+
+@app.route('/user/appointment/list/<int:id>')
+@login_required
+def cancel_appointed_date(id):
+    return render_template("/patient_appointment_list.html", appointments= get_user_appointment(id)) 

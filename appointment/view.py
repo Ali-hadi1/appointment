@@ -36,7 +36,9 @@ def create_schedule():
             return render_template('schedule.html', form=form, schedules=current_user.schedule)
         flash("Please choose proper date", 'info')
         return render_template("schedule.html", form=form, schedules=current_user.schedule)
-    return render_template("schedule.html", form=form, schedules=current_user.schedule)
+    page = request.args.get('page', 1, type=int)
+    current_user_schedules = Schedule.query.filter(Schedule.doctor_id==current_user.id).paginate(per_page=8)
+    return render_template("schedule.html", form=form, schedules=current_user_schedules)
 
 
 def view_doctor_schedule(id):

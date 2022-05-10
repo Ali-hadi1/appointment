@@ -25,7 +25,8 @@ def get_doctor_schedule(id):
 
 
 def get_user_appointment(id):
+    page = request.args.get('page', 1, type=int)
     return db.session.query(User.name.label('firstname'), User.lastname, User.email, Schedule.name, Appointment.id, Appointment.appointment_date)\
             .join(Schedule, Schedule.doctor_id == User.id).join(Appointment, Schedule.id == Appointment.schedule_id)\
-            .filter(Appointment.patient_id == id).all()
+            .filter(Appointment.patient_id == id).paginate(page=page, per_page=8)
 

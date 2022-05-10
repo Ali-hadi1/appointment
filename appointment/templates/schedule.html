@@ -17,7 +17,7 @@
                     <table class="align-middle mb-0 table table-borderless table-striped table-hover">
                         <thead>
                             <tr class="app-normal-font">
-                                <th class="text-center">Id</th>
+                                <th class="text-center">ID</th>
                                 <th class="text-center">Title</th>
                                 <th class="text-center">Start Date</th>
                                 <th class="text-center">End Date</th>
@@ -26,7 +26,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            {% for schedule in schedules %}
+                            {% for schedule in schedules.items %}
                                 <tr class="app-normal-font p-0">
                                     <td class="text-center text-muted">{{ schedule.id }}</td>
                                     <td class="text-center">{{schedule.name}}</td>
@@ -50,6 +50,19 @@
                         </tbody>
                     </table>
                 </div>
+            </div>
+            <div class="float-right mr-3">
+                {% for page_num in schedules.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
+                    {% if page_num  %}
+                        {% if schedules.page == page_num %}
+                            <a class="btn btn-info nb-4" style="padding:2px 8px;" href="{{ url_for('schedule', page=page_num)}}">{{page_num}}</a>
+                        {% else %}
+                            <a class="btn btn-outline-info nb-4" style="padding:2px 8px;" href="{{ url_for('schedule', page=page_num)}}">{{page_num}}</a>
+                        {% endif %}
+                    {% else %}
+                        ...
+                    {% endif %}
+                {% endfor %}
             </div>
         </div>
     </div>
