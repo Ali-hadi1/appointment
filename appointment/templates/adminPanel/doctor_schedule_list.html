@@ -39,7 +39,7 @@
                                         <a href="{{ url_for('admin_edit_doctor_schedule', id= schedule.id) }}" class=" text-success">
                                             <i class="bi bi-pen"></i>
                                         </a>
-                                        <a href="{{url_for('DeleteDoctorSchedule',id=schedule.id)}}" class="text-danger">
+                                        <a href="{{url_for('DeleteDoctorSchedule',id=schedule.id)}}" class="text-danger"  onclick="confirmation(event)">
                                             <i class="bi bi-trash-fill"></i>
                                         </a>
                                     </td>

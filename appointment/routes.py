@@ -5,7 +5,7 @@ from appointment.view import create_doctor_info, delete_user, create_schedule, v
                              patient_create_appointment, admin_create_doctor_schedule, delete_doctor_schedule,\
                              edit_doctor_schedule, appointed_patient_on_a_schedule, all_appointed_patient_list,\
                              get_user_info, delete_an_appointment, current_user_profile, get_users_with_pagenation,\
-                             update_user_password
+                             update_user_password, change_patient_appointment_state
                                  
 from appointment.privilege import admin_required, doctor_required
 from appointment.queries import get_all_confirmed_doctors, get_all_requested_doctors, get_all_doctors,\
@@ -219,3 +219,10 @@ def user_appointment_list(id):
 @login_required
 def cancel_appointed_date(id):
     return render_template("/patient_appointment_list.html", appointments= get_user_appointment(id)) 
+
+
+@app.route('/approve/patient/appointment/<int:id>')
+@login_required
+@doctor_required
+def change_appointment_state(id):
+    return change_patient_appointment_state(id)

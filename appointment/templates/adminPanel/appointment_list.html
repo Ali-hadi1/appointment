@@ -45,7 +45,7 @@
                                     {{ patient.appointment_date }}
                                 </td>
                                 <td class="text-center">
-                                    <a href="{{url_for('delete_appointment', id=patient.id)}}" class="text-danger" onclick="alert('Are your Sure to delete')">
+                                    <a href="{{url_for('delete_appointment', id=patient.id)}}" class="text-danger"  onclick="confirmation(event)">
                                         <i class="bi bi-trash-fill"></i>
                                     </a>
                                 </td>

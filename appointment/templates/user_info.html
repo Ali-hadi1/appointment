@@ -83,26 +83,6 @@
                                 <input type="date" name="date_of_birth" class="form-control form-control-lg input_style" value="{{ user.date_of_birth }}"/>
                             </div>
                         </div>
-                        <div class="col-lg-6">
-                            <div class="form-group">
-                                <label for="role" class="form-control-label">role</label>
-                                <select name="role" class="form-control input_style">
-                                    {% if user.role == 1 %}
-                                        <option value="1" selected> admin</option>
-                                        <option value="2"> doctor</option>
-                                        <option value="3"> patient</option>
-                                    {% elif user.role == 2 %}
-                                        <option value="1"> admin</option>
-                                        <option value="2" selected> doctor</option>
-                                        <option value="3"> patient</option>
-                                    {% else %}
-                                        <option value="1"> admin</option>
-                                        <option value="2"> doctor</option>
-                                        <option value="3" selected> patient</option>
-                                    {% endif %}
-                                </select>
-                            </div>
-                        </div>
                     </div>
                 </fieldset>
                 <div class="form-group mt-3">

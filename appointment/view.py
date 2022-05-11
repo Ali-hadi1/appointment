@@ -111,7 +111,8 @@ def edit_doctor_schedule(id):
 
 
 def appointed_patient_on_a_schedule(id):
-    patient_list = db.session.query(User.name, User.lastname, User.phone, User.gender, Appointment.reason, Appointment.appointment_date)\
+    patient_list = db.session.query(User.name, User.lastname, User.phone, User.gender, Appointment.reason, Appointment.appointment_date,
+                     Appointment.state, Appointment.id)\
                     .join(Appointment, User.id == Appointment.patient_id).filter(Appointment.schedule_id == id).all()
     return render_template('appointed_patients.html', patients=patient_list)
 
@@ -129,7 +130,7 @@ def get_user_info(id):
     if request.method == "POST":
         user_info.update_user(request.form.get('name'), request.form.get('lastname'), request.form.get('username'),
                               request.form.get('email'), request.form.get('address'), request.form.get('phone'),
-                              user_info.date_of_birth, user_info.gender, request.form.get('role'))
+                              user_info.date_of_birth, user_info.gender, user_info.role)
         flash("The Account updated successfully!", 'info')
         return redirect(url_for("users"))
     return render_template('user_info.html', user=user_info)
@@ -177,4 +178,11 @@ def update_user_password():
     if request.url == base_url + "/admin/change/password":
         return render_template("/adminPanel/admin_update_password.html", form=form)
     return render_template('/update_password.html', form=form)
+
+
+def change_patient_appointment_state(id):
+    desired_appointment = Appointment.query.filter_by(id=id).first()
+    state = request.args.get('state')
+    desired_appointment.change_appointment_state(state)
+    return redirect(url_for('appointed_patient', id=desired_appointment.schedule_id))
 

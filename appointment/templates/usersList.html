@@ -64,7 +64,7 @@
                                             <a href="{{ url_for('user_info', id=user.id)}}" class="text-info">
                                                 <i class="bi bi-person-circle"></i>
                                             </a>
-                                            <a href="{{ url_for('delete', id = user.id)}}" class="text-danger">
+                                            <a href="{{ url_for('delete', id = user.id)}}" class="text-danger"  onclick="confirmation(event)">
                                                 <i class="bi bi-trash-fill"></i>
                                             </a>
                                         {% endif %}
