@@ -21,7 +21,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            {% if appointments %}
+                            {% if appointments.items %}
                                 {% for appointment in appointments.items %}
                                     <tr class="app-normal-font p-0 text-center">
                                         <td class="text-center">{{ appointment.firstname }}</td>

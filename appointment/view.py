@@ -2,10 +2,14 @@ from appointment import bcrypt
 from flask import render_template, redirect, url_for, request, flash
 from appointment import db
 from appointment.forms import DoctorInfoForm, CreateSchedule, MakeAppointment, UpdateAccount, ChangePassword
-from appointment.models import DoctorInfo, User, Schedule, Appointment
+from appointment.Models.UserModel import User
+from appointment.Models.DoctorInfoModel import DoctorInfo
+from appointment.Models.ScheduleModel import Schedule
+from appointment.Models.AppointmentModel import Appointment
 from flask_login import current_user
 from sqlalchemy import and_
 from datetime import datetime
+from appointment.queries import get_schedule_list
 
 base_url = 'http://127.0.0.1:9000'
 
@@ -31,13 +35,19 @@ def delete_user(id):
 def create_schedule():
     form = CreateSchedule()
     if form.validate_on_submit():
+        schedules = Schedule.query.filter_by(doctor_id=current_user.id)\
+                    .filter(((Schedule.start_date >= form.start_date.data) & (Schedule.start_date <= form.end_date.data)\
+                    | (Schedule.end_date >= form.start_date.data) & (Schedule.end_date <= form.end_date.data))).all()
+        return f"{schedules}"
+        if schedules:
+            flash('Schedules date Confilcted', 'warning')
+            return render_template('schedule.html', form=form, schedules=get_schedule_list(current_user.id))
         if form.start_date.data <= form.end_date.data:
             Schedule(form.name.data, current_user.id, form.start_date.data, form.end_date.data, form.description.data)
-            return render_template('schedule.html', form=form, schedules=current_user.schedule)
+            return render_template('schedule.html', form=form, schedules=get_schedule_list(current_user.id))
         flash("Please choose proper date", 'info')
-        return render_template("schedule.html", form=form, schedules=current_user.schedule)
-    page = request.args.get('page', 1, type=int)
-    current_user_schedules = Schedule.query.filter(Schedule.doctor_id==current_user.id).paginate(per_page=8)
+        return render_template("schedule.html", form=form, schedules=get_schedule_list(current_user.id))
+    current_user_schedules = get_schedule_list(current_user.id)
     return render_template("schedule.html", form=form, schedules=current_user_schedules)
 
 
@@ -46,7 +56,7 @@ def view_doctor_schedule(id):
     if not doctor.schedule:
         flash("This doctor doesn't have any schedule!", 'info')
         return redirect(url_for('home'))
-    return render_template("view_schedules.html", schedules=doctor.schedule)
+    return render_template("view_schedules.html", schedules=doctor.schedule, todaydate=datetime.now().date())
 
 
 def patient_create_appointment(id):

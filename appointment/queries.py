@@ -1,6 +1,9 @@
 from appointment import db
 from flask import request
-from appointment.models import User, DoctorInfo, Schedule, Appointment
+from appointment.Models.UserModel import User
+from appointment.Models.DoctorInfoModel import DoctorInfo
+from appointment.Models.ScheduleModel import Schedule
+from appointment.Models.AppointmentModel import Appointment
 
 
 def get_all_confirmed_doctors():
@@ -29,4 +32,13 @@ def get_user_appointment(id):
     return db.session.query(User.name.label('firstname'), User.lastname, User.email, Schedule.name, Appointment.id, Appointment.appointment_date)\
             .join(Schedule, Schedule.doctor_id == User.id).join(Appointment, Schedule.id == Appointment.schedule_id)\
             .filter(Appointment.patient_id == id).paginate(page=page, per_page=8)
+
+
+def get_schedule_list(id):
+    page = request.args.get('page', 1, type=int)
+    return Schedule.query.filter(Schedule.doctor_id==id).paginate(page=page, per_page=8)
+
+
+def get_all_patients():
+    return User.query.filter(User.role==3).all()
 

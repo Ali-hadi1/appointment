@@ -1,9 +1,10 @@
+from logging import PlaceHolder
 from flask import flash
 from flask_wtf import FlaskForm
 from flask_login import current_user
 from wtforms import StringField, PasswordField, SubmitField, BooleanField, DateField, RadioField, SelectField, TextAreaField, HiddenField
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError, Regexp
-from appointment.models import User
+from appointment.Models.UserModel import User
 from datetime import datetime
 from re import search
 
@@ -101,6 +102,10 @@ class CreateSchedule(FlaskForm):
         if not search('^[\w\s]+', description.data):
             flash("Please enter valid description", 'danger')
             raise ValidationError('Please enter valid description!')
+    
+    def validate_start_date(self, start_date):
+        if start_date.data < datetime.now().date():
+            raise ValidationError('The Start Date should be higher or equal to the today date!')
 
 
 class MakeAppointment(FlaskForm):

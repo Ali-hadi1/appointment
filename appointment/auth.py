@@ -2,7 +2,7 @@ from flask import render_template, redirect, url_for, request, flash
 from appointment.forms import UserRegisteration, Login
 from appointment import bcrypt
 from flask_login import login_user, current_user
-from appointment.models import User
+from appointment.Models.UserModel import User
 
 
 def create_account():

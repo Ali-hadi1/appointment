@@ -8,9 +8,9 @@ from appointment.view import create_doctor_info, delete_user, create_schedule, v
                              update_user_password, change_patient_appointment_state
                                  
 from appointment.privilege import admin_required, doctor_required
-from appointment.queries import get_all_confirmed_doctors, get_all_requested_doctors, get_all_doctors,\
-                                get_doctor_schedule, get_user_appointment
-from appointment.models import User, DoctorInfo
+from appointment.queries import get_all_confirmed_doctors, get_all_patients, get_all_requested_doctors,\
+                                get_doctor_schedule, get_user_appointment, get_all_doctors
+from appointment.Models.DoctorInfoModel import DoctorInfo
 from flask_login import logout_user, login_required
 
 
@@ -20,7 +20,9 @@ from flask_login import logout_user, login_required
 def dashboard():
     doc_request = DoctorInfo.query.filter_by(valid=False).all()
     count = len(doc_request)
-    return render_template("dashboard.html", count=count)
+    return render_template("dashboard.html", count=count, count_patients=len(get_all_patients()),
+        count_doctors=len(get_all_confirmed_doctors())
+    )
 
 
 @app.route("/")
