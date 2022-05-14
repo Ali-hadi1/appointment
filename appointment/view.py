@@ -11,7 +11,7 @@ from sqlalchemy import and_
 from datetime import datetime
 from appointment.queries import get_schedule_list
 
-base_url = 'http://127.0.0.1:9000'
+base_url = 'http://172.30.10.41:5000'
 
 
 def create_doctor_info(id):
@@ -36,9 +36,12 @@ def create_schedule():
     form = CreateSchedule()
     if form.validate_on_submit():
         schedules = Schedule.query.filter_by(doctor_id=current_user.id)\
-                    .filter(((Schedule.start_date >= form.start_date.data) & (Schedule.start_date <= form.end_date.data)\
-                    | (Schedule.end_date >= form.start_date.data) & (Schedule.end_date <= form.end_date.data))).all()
-        return f"{schedules}"
+            .filter((Schedule.start_date.between(form.start_date.data, form.end_date.data) | (Schedule.end_date.between(form.start_date.data, form.end_date.data)) | \
+                 ((Schedule.start_date <= form.start_date.data) & (Schedule.end_date >= form.end_date.data)))).all()
+        # schedules = Schedule.query.filter_by(doctor_id=current_user.id)\
+        #     .filter(((Schedule.start_date >= form.start_date.data) & (Schedule.start_date <= form.end_date.data)\
+        #     | (Schedule.end_date >= form.start_date.data) & (Schedule.end_date <= form.end_date.data))).all()
+        
         if schedules:
             flash('Schedules date Confilcted', 'warning')
             return render_template('schedule.html', form=form, schedules=get_schedule_list(current_user.id))
@@ -72,8 +75,8 @@ def patient_create_appointment(id):
             return redirect(url_for('patientAppointment', id=id))
         incoming_date_exist = db.session.query(Appointment)\
             .filter(and_(Appointment.schedule_id == id,
-                         Appointment.appointment_date == form.date.data)).all()
-        if incoming_date_exist:
+                         Appointment.appointment_date == form.date.data)).order_by(Appointment.id.desc()).first()
+        if incoming_date_exist.state != 'cancel':
             flash("this date booked before Please choose a different one!", "info")
             return redirect(url_for('patientAppointment', id=id))
         Appointment(current_user.id, form.schedule_id.data, form.reason.data, form.date.data)
@@ -86,6 +89,12 @@ def admin_create_doctor_schedule(id):
     doctor = User.query.filter_by(id=id).first()
     form = CreateSchedule()
     if form.validate_on_submit():
+        schedules = Schedule.query.filter_by(doctor_id=doctor.id)\
+            .filter((Schedule.start_date.between(form.start_date.data, form.end_date.data) | (Schedule.end_date.between(form.start_date.data, form.end_date.data)) | \
+                 ((Schedule.start_date <= form.start_date.data) & (Schedule.end_date >= form.end_date.data)))).all() 
+        if schedules:
+            flash('Schedules date Confilcted', 'warning')
+            return redirect(url_for('get_and_create_doctor_schedule', id=doctor.id))
         if form.start_date.data <= form.end_date.data:
             Schedule(form.name.data, doctor.id, form.start_date.data, form.end_date.data, form.description.data)
             return redirect(url_for('get_and_create_doctor_schedule', id=doctor.id))

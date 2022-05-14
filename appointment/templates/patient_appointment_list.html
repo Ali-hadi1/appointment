@@ -43,9 +43,13 @@
                                                 <div class="badge badge-danger">Canceled </div>
                                             {% endif %}
                                         </td>
-                                        <td class="text-center p-1">
+                                        <td class="text-center p-1 d-flex align-items-center justify-content-center">
                                             {% if appointment.state != 'cancel'%}
                                                 <a href="{{ url_for('patient_change_appointment_state', id=appointment.id, state='cancel' )}}" class="btn btn-danger p-1"> <small>Cancel</small></a>
+                                            {% else %}
+                                                <span class="text-danger mt-1" style="font-size: 1.2rem;">
+                                                    <i class="bi bi-x-lg"></i>
+                                                </span>
                                             {% endif %}
                                         </td>
                                     </tr>
@@ -60,6 +64,7 @@
                 </div>
             </div>
             <div class="float-right mr-3">
+            {% if appointments.pages > 1 %}
                 {% for page_num in appointments.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
                     {% if page_num  %}
                         {% if appointments.page == page_num  %}
@@ -71,6 +76,7 @@
                         ...
                     {% endif %}
                 {% endfor %}
+            {% endif %}
             </div>
         </div>
     </div>

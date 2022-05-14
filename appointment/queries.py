@@ -9,7 +9,7 @@ from flask_login import current_user
 
 def get_all_confirmed_doctors():
     return db.session.query(User.id, User.name, User.lastname, User.email, DoctorInfo.degree, DoctorInfo.specialty)\
-          .join(User, User.id == DoctorInfo.user_id).filter(DoctorInfo.valid == True).all()
+          .join(User, User.id == DoctorInfo.user_id).join(Schedule, Schedule.doctor_id == User.id).filter(DoctorInfo.valid == True).all()
 
 
 def get_all_requested_doctors():

@@ -52,6 +52,7 @@
                 </div>
             </div>
             <div class="float-right mr-3">
+            {% if schedules.pages > 1 %}
                 {% for page_num in schedules.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
                     {% if page_num  %}
                         {% if schedules.page == page_num %}
@@ -63,6 +64,7 @@
                         ...
                     {% endif %}
                 {% endfor %}
+            {% endif %}
             </div>
         </div>
     </div>

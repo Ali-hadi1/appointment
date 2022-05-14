@@ -62,6 +62,10 @@
                                         <span class="text-success" style="font-size: 1.2rem;">
                                             <i class="bi bi-check-lg"></i>
                                         </span>
+                                    {% else %}
+                                        <span class="text-danger" style="font-size: 1.2rem;">
+                                            <i class="bi bi-x"></i>
+                                        </span>
                                     {% endif%}
                                     <a href="{{url_for('delete_appointment', id=patient.id)}}" class="text-danger"  onclick="confirmation(event)">
                                         <i class="bi bi-trash-fill" style="font-size: 1.2rem;"></i>
