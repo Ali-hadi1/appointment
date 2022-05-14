@@ -1,14 +1,15 @@
 from appointment import db
-from flask import request
+from flask import request, flash
 from appointment.Models.UserModel import User
 from appointment.Models.DoctorInfoModel import DoctorInfo
 from appointment.Models.ScheduleModel import Schedule
 from appointment.Models.AppointmentModel import Appointment
+from flask_login import current_user
 
 
 def get_all_confirmed_doctors():
     return db.session.query(User.id, User.name, User.lastname, User.email, DoctorInfo.degree, DoctorInfo.specialty)\
-              .join(User, User.id == DoctorInfo.user_id).filter(DoctorInfo.valid == True).all()
+          .join(User, User.id == DoctorInfo.user_id).filter(DoctorInfo.valid == True).all()
 
 
 def get_all_requested_doctors():
@@ -27,11 +28,12 @@ def get_doctor_schedule(id):
     return Schedule.query.filter(Schedule.doctor_id == id).all()
 
 
-def get_user_appointment(id):
+def get_user_appointment():
     page = request.args.get('page', 1, type=int)
-    return db.session.query(User.name.label('firstname'), User.lastname, User.email, Schedule.name, Appointment.id, Appointment.appointment_date)\
-            .join(Schedule, Schedule.doctor_id == User.id).join(Appointment, Schedule.id == Appointment.schedule_id)\
-            .filter(Appointment.patient_id == id).paginate(page=page, per_page=8)
+    return db.session.query(User.name.label('firstname'), User.lastname, User.email, Schedule.name, Appointment.id,
+                            Appointment.appointment_date, Appointment.state)\
+        .join(Schedule, Schedule.doctor_id == User.id).join(Appointment, Schedule.id == Appointment.schedule_id)\
+        .filter(Appointment.patient_id == current_user.id).paginate(page=page, per_page=8)
 
 
 def get_schedule_list(id):

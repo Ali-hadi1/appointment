@@ -46,18 +46,18 @@
                                     {{ patient.appointment_date }}
                                 </td>
                                 <td class="text-center">
-                                    {% if patient.state == 'drift' %}
-                                            <div class="badge badge-warning">Drift </div>
-                                        {% elif patient.state == 'approved' %}
-                                            <div class="badge badge-success">Approved </div>
-                                        {% else %}
-                                            <div class="badge badge-danger">Canced </div>
-                                        {% endif %}
+                                    {% if patient.state == 'pending' %}
+                                        <div class="badge badge-warning">Pending </div>
+                                    {% elif patient.state == 'approved' %}
+                                        <div class="badge badge-success">Approved </div>
+                                    {% else %}
+                                        <div class="badge badge-danger">Canceled </div>
+                                    {% endif %}
                                 </td>
-                                <td class="text-center">
-                                    {% if patient.state == 'drift' %}
-                                        <a href="{{ url_for('change_appointment_state', id=patient.id, state='approved' )}}" class="btn btn-info p-1"> <small>Approve</small></a>
-                                        <a href="{{ url_for('change_appointment_state', id=patient.id, state='cancel' )}}" class="btn btn-danger p-1"> <small>Cancel</small></a>
+                                <td class="text-center d-flex justify-content-around">
+                                    {% if patient.state == 'pending' %}
+                                        <a href="{{ url_for('doctor_change_appointment_state', id=patient.id, state='approved' )}}" class="btn btn-info p-1 d-flex align-items-center"> <small>Approve</small></a>
+                                        <a href="{{ url_for('doctor_change_appointment_state', id=patient.id, state='cancel' )}}" class="btn btn-danger p-1"> <small>Cancel</small></a>
                                     {% elif patient.state == 'approved' %}
                                         <span class="text-success" style="font-size: 1.2rem;">
                                             <i class="bi bi-check-lg"></i>

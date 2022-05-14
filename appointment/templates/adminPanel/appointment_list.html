@@ -5,17 +5,18 @@
 <div class="row">
     <div class="col-md-12">
         <div class="main-card mb-3 card">
-            <div class="card-header">Appointed Patinet </div>
+            <div class="card-header">Appointed Patient </div>
             <div class="table-responsive">
                 <table class="align-middle mb-0 table table-borderless table-striped table-hover">
                     <thead>
                         <tr  class="app-normal-font">
                             <th class="text-center">Name</th>
-                            <th class="text-center">lastname</th>
-                            <th class="text-center">phone</th>
-                            <th class="text-center">gender</th>
-                            <th class="text-center">reason</th>
-                            <th class="text-center">date of Appointment</th>
+                            <th class="text-center">Lastname</th>
+                            <th class="text-center">Phone</th>
+                            <th class="text-center">Gender</th>
+                            <th class="text-center">Reason</th>
+                            <th class="text-center">Date of Appointment</th>
+                            <th class="text-center">State</th>
                             <th class="text-center">Actions</th>
                         </tr>
                     </thead>
@@ -45,8 +46,25 @@
                                     {{ patient.appointment_date }}
                                 </td>
                                 <td class="text-center">
+                                    {% if patient.state == 'pending' %}
+                                        <div class="badge badge-warning">Pending </div>
+                                    {% elif patient.state == 'approved' %}
+                                        <div class="badge badge-success">Approved </div>
+                                    {% else %}
+                                        <div class="badge badge-danger">Canceled </div>
+                                    {% endif %}
+                                </td>
+                                <td class="text-center">
+                                    {% if patient.state == 'pending' %}
+                                        <a href="{{ url_for('admin_change_appointment_state', id=patient.id, state='approved' )}}" class="btn btn-info p-1 "> <small>Approve</small></a>
+                                        <a href="{{ url_for('admin_change_appointment_state', id=patient.id, state='cancel' )}}" class="btn btn-danger p-1"> <small>Cancel</small></a>
+                                    {% elif patient.state == 'approved' %}
+                                        <span class="text-success" style="font-size: 1.2rem;">
+                                            <i class="bi bi-check-lg"></i>
+                                        </span>
+                                    {% endif%}
                                     <a href="{{url_for('delete_appointment', id=patient.id)}}" class="text-danger"  onclick="confirmation(event)">
-                                        <i class="bi bi-trash-fill"></i>
+                                        <i class="bi bi-trash-fill" style="font-size: 1.2rem;"></i>
                                     </a>
                                 </td>
                             </tr>

@@ -121,17 +121,17 @@ def edit_doctor_schedule(id):
 
 
 def appointed_patient_on_a_schedule(id):
-    patient_list = db.session.query(User.name, User.lastname, User.phone, User.gender, Appointment.reason, Appointment.appointment_date,
-                     Appointment.state, Appointment.id)\
+    patient_list = db.session.query(User.name, User.lastname, User.phone, User.gender, Appointment.reason,
+                                    Appointment.appointment_date, Appointment.state, Appointment.id)\
                     .join(Appointment, User.id == Appointment.patient_id).filter(Appointment.schedule_id == id).all()
     return render_template('appointed_patients.html', patients=patient_list)
 
 
 def all_appointed_patient_list():
     page = request.args.get('page', 1, type=int)
-    all_appointed_patient = db.session.query(User.name, User.lastname, User.phone, User.gender,
-                         Appointment.reason, Appointment.id, Appointment.appointment_date)\
-                         .join(Appointment, User.id == Appointment.patient_id).paginate(page=page, per_page=7)
+    all_appointed_patient = db.session.query(User.name, User.lastname, User.phone, User.gender, Appointment.reason,
+                                             Appointment.id, Appointment.appointment_date, Appointment.state)\
+                              .join(Appointment, User.id == Appointment.patient_id).paginate(page=page, per_page=7)
     return render_template('adminPanel/appointment_list.html', patients=all_appointed_patient)
 
 
@@ -194,5 +194,10 @@ def change_patient_appointment_state(id):
     desired_appointment = Appointment.query.filter_by(id=id).first()
     state = request.args.get('state')
     desired_appointment.change_appointment_state(state)
+    if request.url == base_url + "/change/patient/appointment/state/" + str(id) + "?state=cancel":
+        return redirect(url_for('user_appointment_list'))
+    elif request.url == base_url + "/admin/change/patient/appointment/state/" \
+                                 + str(id) + "?state=" + request.args.get("state"):
+        return redirect(url_for('appointed_patient_list'))
     return redirect(url_for('appointed_patient', id=desired_appointment.schedule_id))
 

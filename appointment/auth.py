@@ -39,6 +39,6 @@ def user_login():
             next_page = request.args.get('next')
             return redirect(next_page) if next_page else redirect(url_for('home'))
         else:
-            flash("check your email or password!", 'danger')
+            flash("check your username or password!", 'danger')
     return render_template("login.html", form=form)
 

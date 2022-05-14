@@ -211,20 +211,34 @@ def doctor_schedule(id):
     return render_template("/doctor_schedules.html", schedules=get_doctor_schedule(id)) 
 
 
-@app.route('/user/appointment/list/<int:id>')
+@app.route('/user/appointment/list')
 @login_required
-def user_appointment_list(id):
-    return render_template("/patient_appointment_list.html", appointments= get_user_appointment(id)) 
+def user_appointment_list():
+    return render_template("/patient_appointment_list.html", appointments=get_user_appointment())
 
 
 @app.route('/user/appointment/list/<int:id>')
 @login_required
 def cancel_appointed_date(id):
-    return render_template("/patient_appointment_list.html", appointments= get_user_appointment(id)) 
+    return render_template("/patient_appointment_list.html", appointments=get_user_appointment(id))
 
 
-@app.route('/approve/patient/appointment/<int:id>')
+@app.route('/doctor/change/patient/appointment/state/<int:id>')
 @login_required
 @doctor_required
-def change_appointment_state(id):
+def doctor_change_appointment_state(id):
     return change_patient_appointment_state(id)
+
+
+@app.route('/admin/change/patient/appointment/state/<int:id>')
+@login_required
+@admin_required
+def admin_change_appointment_state(id):
+    return change_patient_appointment_state(id)
+
+
+@app.route('/change/patient/appointment/state/<int:id>')
+@login_required
+def patient_change_appointment_state(id):
+    return change_patient_appointment_state(id)
+

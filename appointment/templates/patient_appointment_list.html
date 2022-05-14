@@ -17,6 +17,7 @@
                                 <th class="text-center">Doctor Email</th>
                                 <th class="text-center">Schedule Title</th>
                                 <th class="text-center">Appointment Date</th>
+                                <th class="text-center">State</th>
                                 <th class="text-center">Actions</th>
                             </tr>
                         </thead>
@@ -33,10 +34,19 @@
                                         </td>
                                         <td class="text-center">{{appointment.name}}</td>
                                         <td class="text-center td_description_max_width">{{appointment.appointment_date}}</td>
+                                        <td>
+                                            {% if appointment.state == 'pending' %}
+                                            <div class="badge badge-warning">Pending </div>
+                                            {% elif appointment.state == 'approved' %}
+                                                <div class="badge badge-success">Approved </div>
+                                            {% else %}
+                                                <div class="badge badge-danger">Canceled </div>
+                                            {% endif %}
+                                        </td>
                                         <td class="text-center p-1">
-                                            <a href="" class="btn btn-danger">
-                                                <small class="app-normal-font">Cancel</small>
-                                            </a>
+                                            {% if appointment.state != 'cancel'%}
+                                                <a href="{{ url_for('patient_change_appointment_state', id=appointment.id, state='cancel' )}}" class="btn btn-danger p-1"> <small>Cancel</small></a>
+                                            {% endif %}
                                         </td>
                                     </tr>
                                 {% endfor %}

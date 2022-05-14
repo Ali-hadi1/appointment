@@ -12,12 +12,12 @@ from re import search
 
 class UserRegisteration(FlaskForm):
     name = StringField('Name', validators=[DataRequired(), Length(min=2 , max=20),
-                        Regexp('^\w+$', message="Your username must contain alphanumric or underscore")])
+                        Regexp('^\w+$', message="Your name must contain alphanumric or underscore")])
     username = StringField('Username', validators=[DataRequired(), Length(min=4),
                         Regexp('^\w+$', message="Your username must contain alphanumric or underscore")])
     email = StringField('Email',validators=[DataRequired(), Email()])
     lastname = StringField('Lastname', validators=[DataRequired(), Length(min=4 , max=20),
-                        Regexp('^\w+$', message="Your username must contain alphanumric or underscore")])
+                        Regexp('^\w+$', message="Your lastname must contain alphanumric or underscore")])
     address = StringField('Address', validators=[DataRequired(), Length(max=200)])
     date_of_birth = DateField('Date Of Birth', validators=[DataRequired()])
     phone = StringField('Phone', validators=[DataRequired(), Length(min=10, max=14)])
@@ -44,12 +44,12 @@ class UserRegisteration(FlaskForm):
 
 class UpdateAccount(FlaskForm):
     name = StringField('Name', validators=[DataRequired(), Length(min=2, max=8),
-                    Regexp('^\w+$', message="Your username must contain alphanumric or underscore")])
+                    Regexp('^\w+$', message="Your name must contain alphanumric or underscore")])
     username = StringField('Username', validators=[DataRequired(), Length(min=4),
                     Regexp('^\w+$', message="Your username must contain alphanumric or underscore")])
     email = StringField('Email', validators=[DataRequired(), Email()])
     lastname = StringField('Lastname', validators=[DataRequired(), Length(min=4, max=8),
-                    Regexp('^\w+$', message="Your username must contain alphanumric or underscore")])
+                    Regexp('^\w+$', message="Your lastname must contain alphanumric or underscore")])
     address = StringField('Address', validators=[DataRequired(), Length(max=200)])
     date_of_birth = DateField('Date Of Birth', validators=[DataRequired()])
     phone = StringField('Phone', validators=[DataRequired(), Length(min=10, max=14)])
