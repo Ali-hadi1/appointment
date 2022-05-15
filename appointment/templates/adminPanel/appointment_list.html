@@ -33,7 +33,7 @@
                                     {{patient.phone}}
                                 </td>
                                 <td class="text-center">
-                                    {% if patient.gender == True %}
+                                    {% if patient.gender == 1 %}
                                         Male
                                     {% else %}
                                         Female
@@ -78,17 +78,19 @@
             </div>
         </div>
         <div class="float-right mr-3">
-            {% for page_num in patients.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
-                {% if page_num  %}
-                    {% if patients.page == page_num  %}
-                        <a class="btn btn-info nb-4" style="padding:2px 8px;" href="{{ url_for('appointed_patient_list', page=page_num)}}">{{page_num}}</a>
+            {% if patients.pages > 1 %}
+                {% for page_num in patients.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
+                    {% if page_num  %}
+                        {% if patients.page == page_num  %}
+                            <a class="btn btn-info nb-4" style="padding:2px 8px;" href="{{ url_for('appointed_patient_list', page=page_num)}}">{{page_num}}</a>
+                        {% else %}
+                            <a class="btn btn-outline-info nb-4" style="padding:2px 8px;" href="{{ url_for('appointed_patient_list', page=page_num)}}">{{page_num}}</a>
+                        {% endif %}
                     {% else %}
-                        <a class="btn btn-outline-info nb-4" style="padding:2px 8px;" href="{{ url_for('appointed_patient_list', page=page_num)}}">{{page_num}}</a>
+                        ...
                     {% endif %}
-                {% else %}
-                    ...
-                {% endif %}
-            {% endfor %}
+                {% endfor %}
+            {% endif %}
         </div>
     </div>
 </div>

@@ -9,7 +9,7 @@
                 <table class="align-middle mb-0 table table-borderless table-striped table-hover">
                     <thead>
                         <tr  class="app-normal-font">
-                            <th class="text-center">Id</th>
+                            <th class="text-center">ID</th>
                             <th class="text-center">Name</th>
                             <th class="text-center">Lastname</th>
                             <th class="text-center">Email</th>
@@ -41,7 +41,7 @@
                                     {{doctor.phone}}
                                 </td>
                                 <td class="text-center" style="width: 150px;">
-                                    {% if doctor.gender == True %}
+                                    {% if doctor.gender == 1 %}
                                         Male
                                     {% else %}
                                         Female
@@ -62,17 +62,19 @@
             </div>
         </div>
         <div class="float-right mr-3">
-            {% for page_num in doctors.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
-                {% if page_num  %}
-                    {% if doctors.page == page_num  %}
-                        <a class="btn btn-info nb-4" style="padding:2px 8px;" href="{{ url_for('doctorsSchedules', page=page_num)}}">{{page_num}}</a>
+            {% if doctors.pages > 1 %}
+                {% for page_num in doctors.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
+                    {% if page_num  %}
+                        {% if doctors.page == page_num  %}
+                            <a class="btn btn-info nb-4" style="padding:2px 8px;" href="{{ url_for('doctorsSchedules', page=page_num)}}">{{page_num}}</a>
+                        {% else %}
+                            <a class="btn btn-outline-info nb-4" style="padding:2px 8px;" href="{{ url_for('doctorsSchedules', page=page_num)}}">{{page_num}}</a>
+                        {% endif %}
                     {% else %}
-                        <a class="btn btn-outline-info nb-4" style="padding:2px 8px;" href="{{ url_for('doctorsSchedules', page=page_num)}}">{{page_num}}</a>
+                        ...
                     {% endif %}
-                {% else %}
-                    ...
-                {% endif %}
-            {% endfor %}
+                {% endfor %}
+            {% endif %}
         </div>
     </div>
 </div>
