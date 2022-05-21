@@ -15,9 +15,9 @@
 <div class="container mt-3 mb-3">
     <span class="" style="font-size: 30px;">Doctors List</span>
     <hr class="mt-1">
-    <div class="row">
+    <div class="col-12 d-flex flex-wrap">
         {% for doctor in doctors %}
-        <div class="col-md-6 offset-md-3 mb-3">
+        <div class="col-lg-4 col-md-6 col-sm-10 mb-3 offset-sm-1 offset-lg-0 offset-md-0">
             <div class="card">
                 <div class="card-header d-flex justify-content-start align-items-center">
                     <h5 class="modal-title text-capitalize">{{ doctor.name}}</h5>
@@ -25,7 +25,7 @@
                 </div>
                 <div class="card-body">
                     <div class="modal-body p-0">
-                        
+
                         <span class="text-capitalize">Doctor Degree: <span class="pl-3">{{ doctor.degree }}</span></span>
                         <br>
                         <span class="text-capitalize">Doctor specialty: <span class="pl-3">{{ doctor.specialty }}</span></span>
@@ -36,7 +36,7 @@
                         </div>
                     </div>
                 </div>
-              </div>     
+              </div>
         </div>
         {% endfor %}
     </div>

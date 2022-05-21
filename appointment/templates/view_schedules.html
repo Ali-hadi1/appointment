@@ -2,46 +2,47 @@
 
 {% block content %}
 {% include 'layout/home_header.html' %}
-
-<div class="row col-12 mt-8">
-    {% for schedule in schedules %}
-    <div class="col-md-6 offset-md-3 mb-3">
-        <div class="card">
-            <div class="card-header d-flex justify-content-between align-items-center">
-                <h5 class="modal-title text-capitalize font-weight-bold">{{ schedule.name }}</h5>
-                <div class="">
-                    {% if todaydate > schedule.end_date %}
+<div class="container mt-8">
+    <div class="col-12 d-flex flex-warp justify-content-center">
+        {% for schedule in schedules %}
+        <div class="col-md-6 mb-3">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="modal-title text-capitalize font-weight-bold">{{ schedule.name }}</h5>
+                    <div class="">
+                        {% if todaydate > schedule.end_date %}
                         <span>Schedule date is Over!</span>
                         <small class="text-danger">
                             {{ schedule.end_date }}
                         </small>
-                    {% else %}
+                        {% else %}
                         <span>Available upto</span>
                         <small class="text-info">
                             {{ schedule.end_date }}
                         </small>
-                    {% endif %}
+                        {% endif %}
+                    </div>
                 </div>
-            </div>
-            <div class="card-body">
-                <div class="modal-body p-0">
-                    <span class="d-flex justify-content-center">{{ schedule.description }}</span>
-                    <br>
-                    <hr class="mb-2">
-                    <div class="col-12 p-0 d-flex justify-content-between">
-                        {% if current_user.id == schedule.doctor_id %}
-                            <a class="btn btn-outline-info" href="{{url_for('appointed_patient', id=schedule.id)}}">appointed patient </a>
-                        {% endif %}
-                        {% if current_user.id == schedule.doctor_id %}
-                            <a class="btn btn-outline-info disable-a" href="{{url_for('patientAppointment', id=schedule.id)}}">Book </a>
-                        {% else %}
-                            <a class="btn btn-outline-info" href="{{url_for('patientAppointment', id=schedule.id)}}">Book </a>
-                        {% endif %}
+                <div class="card-body">
+                    <div class="modal-body p-0">
+                        <span class="d-flex justify-content-center">{{ schedule.description }}</span>
+                        <br>
+                        <hr class="mb-2">
+                        <div class="col-12 p-0 d-flex justify-content-between">
+                            {% if current_user.id == schedule.doctor_id %}
+                            <a class="btn btn-secondary" href="{{url_for('appointed_patient', id=schedule.id)}}">appointed patient </a>
+                            {% endif %}
+                            {% if current_user.id == schedule.doctor_id %}
+                            <a class="btn btn-info disable-a" href="{{url_for('patientAppointment', id=schedule.id)}}">Book </a>
+                            {% else %}
+                            <a class="btn btn-info" href="{{url_for('patientAppointment', id=schedule.id)}}">Book </a>
+                            {% endif %}
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
+        {% endfor %}
     </div>
-    {% endfor %}
 </div>
 {% endblock %}
