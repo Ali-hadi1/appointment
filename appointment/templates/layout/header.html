@@ -1,14 +1,19 @@
 
 <header class="navbar navbar-expand bg-secondary flex-column flex-md-row bd-navbar" style="z-index: 999;">
-    <ul class="navbar-nav mr-auto">
-        <li class="nav-item d-flex align-items-center font-weight-bold title">
-            <span clss="nav-link" href="#">Doctor Appointment App</span>
-        </li>
-        <li class="pl-3 nav-item">
-            <a href="{{ url_for('home') }}" class="nav-link white">Home</a>
-        </li>
-    </ul>
-    <ul class="navbar nav navbar-right p-0">
-        <li class="nav-item"> <a href="{{ url_for('logout') }}" class="nav-link white">Logout</a></li>
-    </ul>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle" aria-controls="navbarToggle" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarToggle">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item d-flex align-items-center font-weight-bold title">
+                <span clss="nav-link" href="#">Doctor Appointment App</span>
+            </li>
+            <li class="pl-3 nav-item">
+                <a href="{{ url_for('home') }}" class="nav-link white header-link">Home</a>
+            </li>
+        </ul>
+        <ul class="navbar nav navbar-right p-0">
+            <li class="nav-item"> <a href="{{ url_for('logout') }}" class="nav-link white header-link">Logout</a></li>
+        </ul>
+    </div>
 </header>
