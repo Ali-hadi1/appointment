@@ -1,6 +1,6 @@
 from flask import render_template, url_for, redirect, request
 from appointment import app, db
-from appointment.auth import create_account, user_login
+from appointment.auth import create_account, user_login, user_forgot_password, user_reset_password
 from appointment.view import create_doctor_info, delete_user, create_schedule, view_doctor_schedule,\
                              patient_create_appointment, admin_create_doctor_schedule, delete_doctor_schedule,\
                              edit_doctor_schedule, appointed_patient_on_a_schedule, all_appointed_patient_list,\
@@ -239,4 +239,14 @@ def admin_change_appointment_state(id):
 @login_required
 def patient_change_appointment_state(id):
     return change_patient_appointment_state(id)
+
+
+@app.route('/forgot/password', methods=['GET', 'POST'])
+def forgot_password():
+    return user_forgot_password()
+
+
+@app.route('/reset/password/<token>', methods=['GET', 'POST'])
+def reset_password(token):
+    return user_reset_password(token)
 
