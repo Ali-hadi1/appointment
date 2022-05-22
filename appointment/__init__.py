@@ -2,6 +2,7 @@ from flask import Flask
 from flask_bcrypt import Bcrypt
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
+from flask_mail import Mail
 import os
 from datetime import datetime
 
@@ -17,6 +18,14 @@ login_manager = LoginManager(app)
 login_manager.login_view = 'login'
 login_manager.login_message_category = 'info'
 
+app.config['MAIL_SERVER'] = 'smtp.mailtrap.io'
+app.config['MAIL_USERNAME'] = 'b89fc38e109879'
+app.config['MAIL_PASSWORD'] = 'ae3d22d7b5c5ab'
+app.config['MAIL_PORT'] = 587
+app.config['MAIL_USE_SSL'] = False
+app.config['MAIL_USE_TLS'] = True
+
+mail = Mail(app)
 
 from appointment import routes
 from appointment.Models.UserModel import User

@@ -5,7 +5,7 @@ from appointment.view import create_doctor_info, delete_user, create_schedule, v
                              patient_create_appointment, admin_create_doctor_schedule, delete_doctor_schedule,\
                              edit_doctor_schedule, appointed_patient_on_a_schedule, all_appointed_patient_list,\
                              get_user_info, delete_an_appointment, current_user_profile, get_users_with_pagenation,\
-                             update_user_password, change_patient_appointment_state
+                             update_user_password, change_patient_appointment_state, confirm_doctor_request
                                  
 from appointment.privilege import admin_required, doctor_required
 from appointment.queries import get_all_confirmed_doctors, get_all_patients, get_all_requested_doctors,\
@@ -83,9 +83,7 @@ def delete(id):
 @login_required
 @admin_required
 def confirm(id):
-    doc = DoctorInfo.query.filter_by(user_id=id).first()
-    doc.valid = True
-    db.session.commit()
+    confirm_doctor_request(id)
     return redirect(url_for('requests'))
 
 
