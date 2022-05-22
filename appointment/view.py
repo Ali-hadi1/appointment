@@ -1,6 +1,6 @@
 from appointment import bcrypt
 from flask import render_template, redirect, url_for, request, flash
-from appointment import db
+from appointment import db, mail
 from appointment.forms import DoctorInfoForm, CreateSchedule, MakeAppointment, UpdateAccount, ChangePassword
 from appointment.Models.UserModel import User
 from appointment.Models.DoctorInfoModel import DoctorInfo
@@ -9,6 +9,7 @@ from appointment.Models.AppointmentModel import Appointment
 from flask_login import current_user
 from sqlalchemy import and_
 from datetime import datetime
+from flask_mail import Message
 from appointment.queries import get_schedule_list
 
 base_url = 'http://127.0.0.1:9000'
@@ -19,8 +20,23 @@ def create_doctor_info(id):
     if form.validate_on_submit():
         DoctorInfo(id, form.degree.data, form.specialty.data)
         flash("Your Info submitted successfully wait for conformation!", 'info')
+        flash("Confirmation Email will send to your email", 'info')
         return redirect(url_for('home'))
     return render_template('doctor_info_form.html', form=form)
+
+
+def confirm_doctor_request(id):
+    try: 
+        doctor = User.query.filter_by(id=id).first()
+        doctor_info = DoctorInfo.query.filter_by(user_id=id).first()
+        msg = Message(subject="Testing mail", sender="info@test.com", recipients=[doctor.email])
+        msg.body = render_template('mail_template.html', lastname=doctor.lastname)
+        mail.send(msg)
+        doctor_info.valid = True
+        db.session.commit()
+        flash('The request confirmed successfully', 'success')
+    except:
+        flash("something is going wrong!", 'danger')
 
 
 def delete_user(id):
@@ -29,6 +45,8 @@ def delete_user(id):
         flash("Ooops, unable to delete your self!", "warning")
         redirect(url_for("users"))
     user.delete_user()
+    if request.args.get('from'):
+        return redirect(url_for('requests'))
     return redirect(url_for('users'))
 
 

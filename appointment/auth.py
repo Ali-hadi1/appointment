@@ -1,9 +1,12 @@
 from flask import render_template, redirect, url_for, request, flash
-from appointment.forms import UserRegisteration, Login
-from appointment import bcrypt
+from appointment.forms import UserRegisteration, Login, ForgotPassword, ResetPassword
+from appointment import bcrypt, db, mail
 from flask_login import login_user, current_user
 from appointment.Models.UserModel import User
+from itsdangerous import URLSafeTimedSerializer, SignatureExpired
+from flask_mail import Message
 
+serializer = URLSafeTimedSerializer('thismustbesecret')
 
 def create_account():
     form = UserRegisteration()
@@ -41,4 +44,31 @@ def user_login():
         else:
             flash("check your username or password!", 'danger')
     return render_template("login.html", form=form)
+
+
+def user_forgot_password():
+    form = ForgotPassword()
+    if form.validate_on_submit():
+        token = serializer.dumps(form.email.data, salt='forgot-password')
+        user = User.query.filter_by(email=form.email.data).first()
+        msg = Message(subject="Forgot Password", sender="info@test.com", recipients=[form.email.data])
+        reset_password_link = url_for('reset_password', token=token, _external=True)
+        msg.html = render_template('/auth/forgot_password_mail_template.html', user=user, link=reset_password_link)
+        mail.send(msg)
+        flash("Reset Password link sent in your Email", 'info')
+        return redirect(url_for('login'))
+    return render_template('/auth/forgot_password.html', form=form)
+
+
+def user_reset_password(token):
+    form = ResetPassword()
+    email = serializer.loads(token, salt='forgot-password', max_age=1200)
+    user = User.query.filter_by(email=email).first()
+    if form.validate_on_submit():
+        hashed_password = bcrypt.generate_password_hash(form.new_password.data).decode('utf-8')
+        user.password = hashed_password
+        db.session.commit()
+        flash('your password reset successfully!', 'success')
+        return redirect(url_for('login'))
+    return render_template('/auth/reset_password.html', form=form)
 
