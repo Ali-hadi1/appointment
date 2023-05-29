@@ -21,7 +21,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        {% for patient in patients %}
+                        {% for patient in patients.items %}
                             <tr class="app-normal-font p-0">
                                 <td class="text-center">
                                     <div class="widget-content p-0">
@@ -74,6 +74,21 @@
                 </table>
             </div>
         </div>
+        <div class="float-right mr-3">
+            {% if patients.pages > 1 %}
+                {% for page_num in patients.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
+                    {% if page_num  %}
+                        {% if patients.page == page_num  %}
+                            <a class="btn btn-info nb-4" style="padding:2px 8px;" href="{{ url_for('appointed_patient', page=page_num)}}">{{page_num}}</a>
+                        {% else %}
+                            <a class="btn btn-outline-info nb-4" style="padding:2px 8px;" href="{{ url_for('appointed_patient', page=page_num)}}">{{page_num}}</a>
+                        {% endif %}
+                    {% else %}
+                        ...
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+            </div>
     </div>
 </div>
 

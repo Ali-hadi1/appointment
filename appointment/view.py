@@ -11,7 +11,7 @@ from sqlalchemy import and_
 from datetime import datetime
 from appointment.queries import get_schedule_list
 
-base_url = 'http://172.30.10.41:5000'
+base_url = 'http://127.0.0.1:9000'
 
 
 def create_doctor_info(id):
@@ -38,10 +38,6 @@ def create_schedule():
         schedules = Schedule.query.filter_by(doctor_id=current_user.id)\
             .filter((Schedule.start_date.between(form.start_date.data, form.end_date.data) | (Schedule.end_date.between(form.start_date.data, form.end_date.data)) | \
                  ((Schedule.start_date <= form.start_date.data) & (Schedule.end_date >= form.end_date.data)))).all()
-        # schedules = Schedule.query.filter_by(doctor_id=current_user.id)\
-        #     .filter(((Schedule.start_date >= form.start_date.data) & (Schedule.start_date <= form.end_date.data)\
-        #     | (Schedule.end_date >= form.start_date.data) & (Schedule.end_date <= form.end_date.data))).all()
-        
         if schedules:
             flash('Schedules date Confilcted', 'warning')
             return render_template('schedule.html', form=form, schedules=get_schedule_list(current_user.id))
@@ -76,10 +72,11 @@ def patient_create_appointment(id):
         incoming_date_exist = db.session.query(Appointment)\
             .filter(and_(Appointment.schedule_id == id,
                          Appointment.appointment_date == form.date.data)).order_by(Appointment.id.desc()).first()
-        if incoming_date_exist.state != 'cancel':
+        if incoming_date_exist and  incoming_date_exist.state != 'cancel':
             flash("this date booked before Please choose a different one!", "info")
             return redirect(url_for('patientAppointment', id=id))
         Appointment(current_user.id, form.schedule_id.data, form.reason.data, form.date.data)
+        flash('your appoitment submited successfuly on ' + str(form.date.data), 'success')
         return redirect(url_for('viewSchedule', id=appointing_schedule.doctor_id))
     return render_template('patientAppointment.html', form=form, seleted_schedule=appointing_schedule,
                            today=datetime.now().date())
@@ -99,8 +96,8 @@ def admin_create_doctor_schedule(id):
             Schedule(form.name.data, doctor.id, form.start_date.data, form.end_date.data, form.description.data)
             return redirect(url_for('get_and_create_doctor_schedule', id=doctor.id))
         flash("Please choose proper date", 'info')
-        return render_template("adminPanel/doctor_schedule_list.html", schedules=doctor.schedule, form=form)
-    return render_template("adminPanel/doctor_schedule_list.html", schedules=doctor.schedule, form=form)
+        return render_template("adminPanel/doctor_schedule_list.html", doctorName=doctor.name, schedules=doctor.schedule, form=form)
+    return render_template("adminPanel/doctor_schedule_list.html", doctorName=doctor.name, schedules=doctor.schedule, form=form)
 
 
 def delete_doctor_schedule(id):
@@ -130,9 +127,10 @@ def edit_doctor_schedule(id):
 
 
 def appointed_patient_on_a_schedule(id):
+    page = request.args.get('page', 1, type=int)
     patient_list = db.session.query(User.name, User.lastname, User.phone, User.gender, Appointment.reason,
                                     Appointment.appointment_date, Appointment.state, Appointment.id)\
-                    .join(Appointment, User.id == Appointment.patient_id).filter(Appointment.schedule_id == id).all()
+                    .join(Appointment, User.id == Appointment.patient_id).filter(Appointment.schedule_id == id).paginate(page=page, per_page=8)
     return render_template('appointed_patients.html', patients=patient_list)
 
 
