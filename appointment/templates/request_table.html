@@ -58,7 +58,7 @@
                                         <a href="{{ url_for('confirm', id = doctor.id)}}" class="text-success">
                                             <i class="bi bi-check-circle-fill"></i>
                                         </a>
-                                        <a href="{{ url_for('delete', id=doctor.id) }}" class="text-danger"
+                                        <a href="{{ url_for('delete', id=doctor.id, from='request_table' )}}" class="text-danger"
                                             onclick="confirmation(event)">
                                             <i class="bi bi-x-square"></i>
                                         </a>

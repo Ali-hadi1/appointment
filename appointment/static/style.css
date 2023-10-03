@@ -74,7 +74,11 @@
 }
 a:hover{
     text-decoration: none;
-    color: rgb(126, 107, 107);
+    color: rgb(163, 142, 142);
+}
+.header-link:hover{
+    text-decoration: none;
+    color: rgb(198, 180, 180);
 }
 .sidebar-items-des{
     background: #968484;
@@ -99,4 +103,7 @@ ul{
 }
 .td_description_max_width{
     max-width: 450px;
+}
+.footer-icon-size{
+    font-size: 1.3rem;
 }
